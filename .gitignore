@@ -1,1 +1,5 @@
 /.idea/
+/obj/
+/libft/obj/
+/cub3D
+/libft/libft.a
