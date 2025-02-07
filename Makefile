@@ -1,9 +1,9 @@
 # Compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address
 
 # Files
-SRC = main.c
+SRC = main.c garbage_collection/gc.c
 SRCS = $(addprefix $(SRCDIR)/, $(SRC))
 OBJ = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRCS))
 EXEC = cub3D
@@ -36,7 +36,7 @@ $(MLX_LIB):
 	$(MAKE) -C $(MLX)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
-	@mkdir -p $(OBJDIR)
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(MLX_INC) $(LIBFT_INC) -c $< -o $@
 
 clean:
