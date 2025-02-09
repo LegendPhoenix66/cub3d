@@ -28,9 +28,9 @@ void	check_args(int argc, char **argv)
 	else
 		file_name = argv[1];
 	len = ft_strlen(file_name);
-	if (len < 4 || ft_strncmp(file_name + len - 4, ".ber", 4))
+	if (len < 4 || ft_strncmp(file_name + len - 4, ".cub", 4))
 	{
-		printf("Error\nFile extension should be '.ber'\n");
+		printf("Error\nFile extension should be '.cub'\n");
 		exit(1);
 	}
 	else if (len == 4)
