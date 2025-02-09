@@ -19,7 +19,7 @@ void	check_args(int argc, char **argv)
 
     if (argc != 2)
     {
-        ft_printf("Error\nExpected 1 arguments, received %d\n", argc - 1);
+        printf("Error\nExpected 1 arguments, received %d\n", argc - 1);
         exit(1);
     }
     file_name = ft_strrchr(argv[1], '/');
@@ -30,12 +30,12 @@ void	check_args(int argc, char **argv)
     len = ft_strlen(file_name);
     if (len < 4 || ft_strncmp(file_name + len - 4, ".ber", 4))
     {
-        ft_printf("Error\nFile extension should be '.ber'\n");
+        printf("Error\nFile extension should be '.ber'\n");
         exit(1);
     }
     else if (len == 4)
     {
-        ft_printf("Error\nFile name should not be empty\n");
+        printf("Error\nFile name should not be empty\n");
         exit(1);
     }
 }

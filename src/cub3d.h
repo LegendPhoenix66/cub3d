@@ -15,7 +15,7 @@
 
 # define DESTROY_NOTIFY 17
 
-# include "garbage_collection/gc.h"
+# include "garbage_collector/gc.h"
 # include "../libft/libft.h"
 #include <mlx.h>
 #include <stdio.h>
