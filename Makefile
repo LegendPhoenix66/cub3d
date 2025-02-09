@@ -3,7 +3,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address
 
 # Files
-SRC = main.c garbage_collection/gc.c
+SRC = main.c gc.c
 SRCS = $(addprefix $(SRCDIR)/, $(SRC))
 OBJ = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRCS))
 EXEC = cub3D
@@ -11,6 +11,10 @@ EXEC = cub3D
 # Directories
 SRCDIR = src
 OBJDIR = obj
+INCDIR = include
+
+# Header file include paths
+INCFLAGS = -I $(INCDIR) -I $(LIBFT) -I $(MLX)
 
 # MinilibX
 MLX = minilibx-linux
@@ -36,11 +40,11 @@ $(MLX_LIB):
 	$(MAKE) -C $(MLX)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(MLX_INC) $(LIBFT_INC) -c $< -o $@
+	@mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) $(INCFLAGS) $(MLX_INC) $(LIBFT_INC) -c $< -o $@
 
 clean:
-	rm -f $(OBJ)
+	rm -rf $(OBJDIR)
 	$(MAKE) -C $(LIBFT) clean
 	$(MAKE) -C $(MLX) clean
 
