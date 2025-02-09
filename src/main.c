@@ -6,26 +6,43 @@
 /*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 21:05:41 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/06 21:05:57 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/09 11:33:29 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "cub3d.h"
 
-#include <stdio.h>
-#include "garbage_collection/gc.h"
-
-int main(void) {
-    char *string_ptr;
-    string_ptr = (char *)gc_malloc(sizeof(char) * 20);
-    sprintf(string_ptr, "Hello GC Simple!");
-    printf("Allocated string: %s\n", string_ptr);
-    gc_free(string_ptr);
-
-    string_ptr = (char *)gc_malloc(sizeof(char) * 20);
-    sprintf(string_ptr, "no free");
-    printf("Allocated string: %s\n", string_ptr);
-    gc_free(string_ptr);
-    printf("Program compiles and runs successfully!\n");
+int cleanup(t_window *window){
+    if (window->win)
+        mlx_destroy_window(window->mlx, window->win);
+    if (window->mlx)
+    {
+        mlx_destroy_display(window->mlx);
+        free(window->mlx);
+    }
     gc_clean();
+    return 0;
+}
+
+int main(int argc, char **argv) {
+
+    t_window window;
+
+    window.mlx = mlx_init();
+    window.win = NULL;
+    window.width = 1920;
+    window.height = 1080;
+
+    // check arguments, map, etc.
+    check_args(argc, argv);
+
+    window.win = mlx_new_window(window.mlx, window.width,
+                                window.height, "cub3d");
+
+    mlx_hook(window.win, DESTROY_NOTIFY, 0, &mlx_loop_end,
+             window.mlx);
+    mlx_key_hook(window.win, &esc_handler, window.mlx);
+    mlx_loop(window.mlx);
+    cleanup(&window);
     return 0;
 }

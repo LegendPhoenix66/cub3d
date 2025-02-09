@@ -3,7 +3,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address
 
 # Files
-SRC = main.c garbage_collection/gc.c
+SRC = main.c hook_handler.c check_args.c garbage_collection/gc.c
 SRCS = $(addprefix $(SRCDIR)/, $(SRC))
 OBJ = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRCS))
 EXEC = cub3D
@@ -45,7 +45,7 @@ clean:
 	$(MAKE) -C $(MLX) clean
 
 fclean: clean
-	rm -f $(EXEC)
+	rm -rf $(EXEC)
 	$(MAKE) -C $(LIBFT) fclean
 
 re: fclean all
