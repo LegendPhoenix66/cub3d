@@ -40,12 +40,12 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) $(MLX_INC) $(LIBFT_INC) -c $< -o $@
 
 clean:
-	rm -f $(OBJ)
+	rm -rf $(OBJDIR)
 	$(MAKE) -C $(LIBFT) clean
 	$(MAKE) -C $(MLX) clean
 
 fclean: clean
-	rm -rf $(EXEC)
+	rm -f $(EXEC)
 	$(MAKE) -C $(LIBFT) fclean
 
 re: fclean all
