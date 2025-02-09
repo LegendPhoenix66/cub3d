@@ -19,6 +19,9 @@
 # include "gc.h"
 # include "libft.h"
 
+# define BUFF_SIZE	1
+# define MAX_FD 1024
+
 # define WINDOW_WIDTH 800
 # define WINDOW_HEIGHT 600
 
