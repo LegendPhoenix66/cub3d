@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/10 13:53:54 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/10 16:04:48 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include "../libft/libft.h"
 # include "garbage_collection/gc.h"
 # include <mlx.h>
+# include <fcntl.h>
 # include <stdio.h>
 
 typedef struct s_window
@@ -41,7 +42,10 @@ typedef struct s_game
 }				t_game;
 
 // check_args.c
-void		check_args(int argc, char **argv);
+void			check_args(int argc, char **argv);
+
+// validate_file.c
+int				is_file_valid(t_game *game, char *file);
 
 // hook_handler.c
 int				esc_handler(int keycode, void *mlx);

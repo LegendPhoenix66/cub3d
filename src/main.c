@@ -34,12 +34,14 @@ int	main(int argc, char **argv)
     game.window.width = 800;
     game.window.height = 600;
 	check_args(argc, argv);
-    // validate_map
+	if (is_file_valid(&game, argv[1]))
+	{
 		game.window.win = mlx_new_window(game.window.mlx, game.window.width, game.window.height,
 				"cub3d");
 		mlx_hook(game.window.win, DESTROY_NOTIFY, 0, &mlx_loop_end, game.window.mlx);
 		mlx_key_hook(game.window.win, &esc_handler, game.window.mlx);
 		mlx_loop(game.window.mlx);
+	}
 	cleanup(&game);
 	return (0);
 }
