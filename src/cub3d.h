@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/09 11:50:23 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/10 13:53:54 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,21 @@
 
 typedef struct s_window
 {
-	void	*mlx;
-	void	*win;
-	int		height;
-	int		width;
-}			t_window;
+	void		*mlx;
+	void		*win;
+	int			height;
+	int			width;
+}				t_window;
+
+typedef struct s_game
+{
+    t_window	window;
+}				t_game;
 
 // check_args.c
 void		check_args(int argc, char **argv);
 
 // hook_handler.c
-int			esc_handler(int keycode, void *mlx);
+int				esc_handler(int keycode, void *mlx);
 
 #endif // CUB3D_H
