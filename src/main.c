@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
+/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 21:05:41 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/10 18:54:26 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/10 21:25:31 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@ int	cleanup(t_game *game)
 		mlx_destroy_window(game->window.mlx, game->window.win);
 	if (game->window.mlx)
 	{
-		mlx_destroy_display(game->window.mlx);
+		#ifdef __linux__
+			mlx_destroy_display(game->window.mlx);
+		#endif
 		free(game->window.mlx);
 	}
 	gc_clean();
@@ -54,7 +56,7 @@ int	main(int argc, char **argv)
         print_game(&game);
 		game.window.win = mlx_new_window(game.window.mlx, game.window.width, game.window.height,
 				"cub3d");
-		mlx_hook(game.window.win, DESTROY_NOTIFY, 0, &mlx_loop_end, game.window.mlx);
+		mlx_hook(game.window.win, DESTROY_NOTIFY, 0, &esc_handler, game.window.mlx);
 		mlx_key_hook(game.window.win, &esc_handler, game.window.mlx);
 		mlx_loop(game.window.mlx);
 	}
