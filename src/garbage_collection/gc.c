@@ -6,38 +6,11 @@
 /*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 16:20:50 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/09 11:36:09 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/10 16:50:18 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "gc.h"
-#include <stdlib.h>
-
-/* Function to get the memory list */
-t_memory_block	**get_memory_list_ptr(void)
-{
-	static t_memory_block	*memory_list = NULL;
-
-	return (&memory_list);
-}
-
-t_memory_block	*create_memory_block(void *ptr)
-{
-	t_memory_block	*block;
-	t_memory_block	**memory_list_ptr;
-
-	block = malloc(sizeof(t_memory_block));
-	if (block == NULL)
-	{
-		free(ptr);
-		return (NULL);
-	}
-	block->ptr = ptr;
-	memory_list_ptr = get_memory_list_ptr();
-	block->next = *memory_list_ptr;
-	*memory_list_ptr = block;
-	return (block);
-}
 
 void	*gc_malloc(size_t size)
 {
@@ -50,6 +23,47 @@ void	*gc_malloc(size_t size)
 	}
 	create_memory_block(ptr);
 	return (ptr);
+}
+
+void	*gc_realloc(void *ptr, size_t new_size)
+{
+	t_memory_block	*current;
+	void			*new_ptr;
+	t_memory_block	**memory_list_ptr;
+
+	if (ptr == NULL)
+		return (gc_malloc(new_size));
+	memory_list_ptr = get_memory_list_ptr();
+	current = *memory_list_ptr;
+	while (current != NULL)
+	{
+		if (current->ptr == ptr)
+		{
+			new_ptr = gc_malloc(new_size);
+			if (new_ptr == NULL)
+				return (NULL);
+			ft_memcpy(new_ptr, ptr, new_size);
+			gc_free(ptr);
+			return (new_ptr);
+		}
+		current = current->next;
+	}
+	return (NULL);
+}
+
+char	*gc_strdup(const char *s)
+{
+	size_t	len;
+	char	*dup;
+
+	if (!s)
+		return (NULL);
+	len = ft_strlen(s) + 1;
+	dup = gc_malloc(len);
+	if (dup == NULL)
+		return (NULL);
+	ft_memcpy(dup, s, len);
+	return (dup);
 }
 
 void	gc_free(void *ptr)

@@ -6,7 +6,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
 # Files
-SRC = main.c hook_handler.c check_args.c garbage_collection/gc.c
+SRC = main.c hook_handler.c check_args.c garbage_collection/gc.c garbage_collection/gc_utils.c
 SRCS = $(addprefix $(SRCDIR)/, $(SRC))
 OBJ = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRCS))
 EXEC = cub3D
