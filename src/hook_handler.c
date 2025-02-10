@@ -11,11 +11,10 @@
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include <X11/keysym.h>
 
 int	esc_handler(int keycode, void *mlx)
 {
-	if (keycode == XK_Escape)
+	if (keycode == ESC_KEY)
 	{
 		mlx_loop_end(mlx);
 	}

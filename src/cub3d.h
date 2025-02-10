@@ -13,6 +13,13 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
+# ifdef __APPLE__
+#  define ESC_KEY 53 // macOS Escape key
+# elif defined(__linux__)
+#  include <X11/keysym.h>
+#  define ESC_KEY XK_Escape
+# endif
+
 # define DESTROY_NOTIFY 17
 
 # include "../libft/libft.h"

@@ -1,6 +1,9 @@
+# Detect platform
+OS := $(shell uname)
+
 # Compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
 # Files
 SRC = main.c hook_handler.c check_args.c garbage_collection/gc.c
@@ -13,10 +16,19 @@ SRCDIR = src
 OBJDIR = obj
 
 # MinilibX
-MLX = minilibx-linux
-MLX_LIB = $(addprefix $(MLX)/,libmlx.a)
-MLX_INC = -I $(MLX)
-MLX_LNK = -L $(MLX) -l mlx -lXext -lX11
+ifeq ($(OS), Darwin) # macOS
+    # macOS MiniLibX setup
+    MLX = minilibx_opengl_20191021
+    MLX_LIB = $(addprefix $(MLX)/,libmlx.a)
+    MLX_INC = -I $(MLX)
+    MLX_LNK = -L $(MLX) -lmlx -framework OpenGL -framework AppKit
+else # Linux
+    # Linux MiniLibX setup
+	MLX = minilibx-linux
+	MLX_LIB = $(addprefix $(MLX)/,libmlx.a)
+	MLX_INC = -I $(MLX)
+	MLX_LNK = -L $(MLX) -l mlx -lXext -lX11
+endif
 
 # libft
 LIBFT = libft

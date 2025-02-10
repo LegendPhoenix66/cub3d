@@ -31,8 +31,8 @@ int	main(int argc, char **argv)
 
 	window.mlx = mlx_init();
 	window.win = NULL;
-	window.width = 1920;
-	window.height = 1080;
+	window.width = 800;
+	window.height = 600;
 	// check arguments, map, etc.
 	check_args(argc, argv);
     // validate_map
