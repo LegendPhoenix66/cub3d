@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:43:58 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/10 18:43:33 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/10 19:06:58 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,22 +81,6 @@ int	open_file(char *file, char **content)
 	}
 	close(fd);
 	return (0);
-}
-
-void print_file_data(t_file_data *file_data)
-{
-    printf("File Data:\n");
-    printf("North Texture: %s\n", file_data->north_texture);
-    printf("South Texture: %s\n", file_data->south_texture);
-    printf("West Texture: %s\n", file_data->west_texture);
-    printf("East Texture: %s\n", file_data->east_texture);
-    printf("Floor Color: %s\n", file_data->floor_color_str);
-    printf("Ceiling Color: %s\n", file_data->ceiling_color_str);
-    printf("Map Lines:\n");
-    for (int i = 0; i < file_data->map_line_count; i++) {
-        printf("%s\n", file_data->map_lines[i]);
-    }
-    printf("Map Lines Count: %d\n", file_data->map_line_count);
 }
 
 int is_space(char c) {
@@ -226,6 +210,46 @@ char *get_next_line(char **content_ptr)
     return (line);
 }
 
+int rgb_to_hex(char *color_str)
+{
+    int r = 0;
+    int g = 0;
+    int b = 0;
+    char **rgb_values;
+
+    rgb_values = ft_split(color_str, ',');
+    r = ft_atoi(rgb_values[0]);
+    g = ft_atoi(rgb_values[1]);
+    b = ft_atoi(rgb_values[2]);
+
+    free(rgb_values[0]);
+    free(rgb_values[1]);
+    free(rgb_values[2]);
+    free(rgb_values);
+    if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
+    {
+        printf("Invalid RGB color: %s\n", color_str);
+        return -1;
+    }
+    return (r << 16) | (g << 8) | b;
+}
+
+void add_to_game(t_game *game, t_file_data *file_data)
+{
+
+    game->east_texture = gc_malloc(sizeof(t_image));
+    game->north_texture = gc_malloc(sizeof(t_image));
+    game->south_texture = gc_malloc(sizeof(t_image));
+    game->west_texture = gc_malloc(sizeof(t_image));
+
+    game->ceiling_color = rgb_to_hex(file_data->ceiling_color_str);
+    game->floor_color = rgb_to_hex(file_data->floor_color_str);
+    game->east_texture->img = mlx_xpm_file_to_image(game->window.mlx,file_data->east_texture, &game->east_texture->width, &game->east_texture->height);
+    game->north_texture->img = mlx_xpm_file_to_image(game->window.mlx, file_data->north_texture, &game->north_texture->width, &game->north_texture->height);
+    game->south_texture->img = mlx_xpm_file_to_image(game->window.mlx, file_data->south_texture, &game->south_texture->width, &game->south_texture->height);
+    game->west_texture->img = mlx_xpm_file_to_image(game->window.mlx, file_data->west_texture, &game->west_texture->width, &game->west_texture->height);
+    game->map = file_data->map_lines;
+}
 
 int validate_content(t_game *game, char *content)
 {
@@ -251,7 +275,7 @@ int validate_content(t_game *game, char *content)
         }
     }
 
-    print_file_data(file_data);
+    add_to_game(game, file_data);
     return (0);
 }
 
@@ -261,10 +285,12 @@ int	is_file_valid(t_game *game, char *file)
 
 	if (open_file(file, &content) != 0)
 	{
+        printf("Error: Could not open file %s\n", file);
 		return (1);
 	}
     if (validate_content(game, content) != 0)
     {
+        printf("Error: Invalid file %s\n", file);
         return (1);
     }
 	return (0);
