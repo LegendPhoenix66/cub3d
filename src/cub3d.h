@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/11 16:29:26 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/12 17:25:10 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,22 @@
 
 # ifdef __APPLE__
 #  define ESC_KEY 53 // macOS Escape key
+#  define W_KEY
+#  define A_KEY
+#  define S_KEY
+#  define D_KEY
+#  define LEFT_ARROW_KEY
+#  define RIGHT_ARROW_KEY
 #  define IS_LINUX 0
 # elif defined(__linux__)
 #  include <X11/keysym.h>
 #  define ESC_KEY XK_Escape
+#  define W_KEY XK_w
+#  define A_KEY XK_a
+#  define S_KEY XK_s
+#  define D_KEY XK_d
+#  define LEFT_ARROW_KEY XK_Left
+#  define RIGHT_ARROW_KEY XK_Right
 #  define IS_LINUX 1
 # endif
 
