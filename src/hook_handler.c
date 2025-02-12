@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hook_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
+/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 10:58:40 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/12 19:39:22 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/12 20:40:50 by kuehara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,14 @@ int	esc_handler(int keycode, void *mlx)
 	else
 		printf("Unknown key: %d\n", keycode);
 	return (0);
+}
+int close_window(void *param)
+{
+    t_game *game = (t_game *)param;
+#ifdef __linux__
+     mlx_loop_end(game->window.mlx);
+     return (0);
+#endif
+    exit(0);
+    return (0);
 }

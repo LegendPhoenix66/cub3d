@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
+/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/12 19:28:24 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/12 20:28:15 by kuehara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,5 +91,5 @@ int				is_file_valid(t_game *game, char *file);
 
 // hook_handler.c
 int				esc_handler(int keycode, void *mlx);
-
+int 			close_window(void *param);
 #endif // CUB3D_H
