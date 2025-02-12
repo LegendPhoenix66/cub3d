@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hook_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 10:58:40 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/12 20:40:50 by kuehara          ###   ########.fr       */
+/*   Updated: 2025/02/13 00:08:00 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,15 @@ int	esc_handler(int keycode, void *mlx)
 	return (0);
 }
 int close_window(void *param)
-{
-    t_game *game = (t_game *)param;
+{ 
 #ifdef __linux__
-     mlx_loop_end(game->window.mlx);
-     return (0);
+	t_game *game;
+
+	game = (t_game *)param;
+    mlx_loop_end(game->window.mlx);
+    return (0);
+#else
+	(void) *param;
 #endif
     exit(0);
     return (0);

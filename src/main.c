@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 21:05:41 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/12 20:41:36 by kuehara          ###   ########.fr       */
+/*   Updated: 2025/02/13 00:09:31 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int cleanup(t_game *game)
 #ifdef __linux__
         mlx_destroy_display(game->window.mlx);
 #else
-        mlx_loop_end(game->window.mlx);
+        (void) *game;
 #endif
         free(game->window.mlx);
 		game->window.mlx = NULL;
