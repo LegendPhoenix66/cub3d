@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:43:58 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/12 18:50:20 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/12 19:06:37 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,13 @@ int	open_file(char *file, char **content)
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 	{
-        ft_putendl_fd("Error: Could not open file", 2);
+		ft_putendl_fd("Error: Could not open file", 2);
 		return (1);
 	}
 	*content = gc_malloc(1);
 	if (!*content)
 	{
-        ft_putendl_fd("Error: Memory allocation failed", 2);
+		ft_putendl_fd("Error: Memory allocation failed", 2);
 		close(fd);
 		return (1);
 	}
@@ -55,7 +55,7 @@ int	open_file(char *file, char **content)
 	buffer = gc_malloc(chunk_size + 1);
 	if (!buffer)
 	{
-        ft_putendl_fd("Error: Memory allocation failed", 2);
+		ft_putendl_fd("Error: Memory allocation failed", 2);
 		close(fd);
 		return (1);
 	}
@@ -65,7 +65,7 @@ int	open_file(char *file, char **content)
 		*content = gc_realloc(*content, total_size + bytes_read + 1);
 		if (!*content)
 		{
-            ft_putendl_fd("Error: Memory allocation failed", 2);
+			ft_putendl_fd("Error: Memory allocation failed", 2);
 			close(fd);
 			return (1);
 		}
@@ -75,7 +75,7 @@ int	open_file(char *file, char **content)
 	}
 	if (bytes_read == -1)
 	{
-        ft_putendl_fd("Error: Failed to read the file", 2);
+		ft_putendl_fd("Error: Failed to read the file", 2);
 		close(fd);
 		return (1);
 	}
@@ -103,16 +103,16 @@ int	is_empty_line(const char *line)
 
 int	process_texture_line(t_file_data *file_data, char *line)
 {
-    char	*texture_path;
+	char	*texture_path;
 
-    texture_path = gc_strdup(line + 3);
-    if (access(texture_path, F_OK) != 0)
-    {
-        ft_putstr_fd("Error: Texture file not found: ", 2);
-        ft_putendl_fd(texture_path, 2);
-        return (0);
-    }
-    if (ft_strncmp(line, "NO ", 3) == 0)
+	texture_path = gc_strdup(line + 3);
+	if (access(texture_path, F_OK) != 0)
+	{
+		ft_putstr_fd("Error: Texture file not found: ", 2);
+		ft_putendl_fd(texture_path, 2);
+		return (0);
+	}
+	if (ft_strncmp(line, "NO ", 3) == 0)
 		file_data->north_texture = gc_strdup(line + 3);
 	else if (ft_strncmp(line, "SO ", 3) == 0)
 		file_data->south_texture = gc_strdup(line + 3);
@@ -121,11 +121,11 @@ int	process_texture_line(t_file_data *file_data, char *line)
 	else if (ft_strncmp(line, "EA ", 3) == 0)
 		file_data->east_texture = gc_strdup(line + 3);
 	else
-    {
-        ft_putstr_fd("Error: Invalid texture descriptor: ", 2);
-        ft_putendl_fd(line, 2)
-        return (0);
-    }
+	{
+		ft_putstr_fd("Error: Invalid texture descriptor: ", 2);
+		ft_putendl_fd(line, 2);
+		return (0);
+	}
 	return (1);
 }
 
@@ -148,33 +148,34 @@ int	process_color_line(t_file_data *file_data, const char *line)
 
 int	is_valid_character(char c)
 {
-    return (c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W' || c == ' ');
+	return (c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W'
+		|| c == ' ');
 }
 
 int	is_valid_map_line(const char *line)
 {
-    for (int i = 0; line[i] != '\0'; i++)
-    {
-        if (!is_valid_character(line[i]))
-        {
-            ft_putstr_fd("Error: Invalid character in map: ", 2);
-            ft_putchar_fd(line[i], 2);
-            ft_putchar_fd('\n', 2);
-            return (0); // Invalid character found
-        }
-    }
-    return (1); // Line is valid
+	for (int i = 0; line[i] != '\0'; i++)
+	{
+		if (!is_valid_character(line[i]))
+		{
+			ft_putstr_fd("Error: Invalid character in map: ", 2);
+			ft_putchar_fd(line[i], 2);
+			ft_putchar_fd('\n', 2);
+			return (0); // Invalid character found
+		}
+	}
+	return (1); // Line is valid
 }
 
 int	process_map_line(t_file_data *file_data, char *line)
 {
 	char	**new_map_lines;
 
-    if (!is_valid_map_line(line))
-    {
-        return (-1);
-    }
-    new_map_lines = gc_realloc(file_data->map_lines, sizeof(char *)
+	if (!is_valid_map_line(line))
+	{
+		return (-1);
+	}
+	new_map_lines = gc_realloc(file_data->map_lines, sizeof(char *)
 			* (file_data->map_line_count + 1));
 	if (!new_map_lines)
 	{
@@ -191,15 +192,15 @@ void	print_missing_config(t_file_data *file_data)
 	if (!file_data->north_texture)
 		ft_putendl_fd("Error: Missing north texture (NO).", 2);
 	if (!file_data->south_texture)
-        ft_putendl_fd("Error: Missing south texture (SO).", 2);
+		ft_putendl_fd("Error: Missing south texture (SO).", 2);
 	if (!file_data->west_texture)
-        ft_putendl_fd("Error: Missing west texture (WE).", 2);
+		ft_putendl_fd("Error: Missing west texture (WE).", 2);
 	if (!file_data->east_texture)
-        ft_putendl_fd("Error: Missing east texture (EA).", 2);
+		ft_putendl_fd("Error: Missing east texture (EA).", 2);
 	if (!file_data->floor_color_str)
-        ft_putendl_fd("Error: Missing floor color (F).", 2);
+		ft_putendl_fd("Error: Missing floor color (F).", 2);
 	if (!file_data->ceiling_color_str)
-        ft_putendl_fd("Error: Missing ceiling color (C).", 2);
+		ft_putendl_fd("Error: Missing ceiling color (C).", 2);
 }
 
 int	is_config_complete(t_file_data *file_data)
@@ -285,11 +286,16 @@ int	rgb_to_hex(char *color_str)
 	free(rgb_values);
 	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
 	{
-        ft_putstr_fd("Error: Invalid RGB color", 2);
-        ft_putendl_fd(color_str, 2);
+		ft_putstr_fd("Error: Invalid RGB color", 2);
+		ft_putendl_fd(color_str, 2);
 		return (-1);
 	}
 	return ((r << 16) | (g << 8) | b);
+}
+
+void	copy_map_to_game(t_game *game, t_file_data *file_data)
+{
+	game->map = file_data->map_lines;
 }
 
 void	add_to_game(t_game *game, t_file_data *file_data)
@@ -312,7 +318,7 @@ void	add_to_game(t_game *game, t_file_data *file_data)
 	game->west_texture->img = mlx_xpm_file_to_image(game->window.mlx,
 			file_data->west_texture, &game->west_texture->width,
 			&game->west_texture->height);
-	game->map = file_data->map_lines;
+	copy_map_to_game(game, file_data);
 }
 
 int	validate_content(t_game *game, char *content)
@@ -349,14 +355,14 @@ int	is_file_valid(t_game *game, char *file)
 
 	if (open_file(file, &content) != 0)
 	{
-        ft_putstr_fd("Error: Could not open file", 2);
-        ft_putendl_fd(file, 2);
+		ft_putstr_fd("Error: Could not open file", 2);
+		ft_putendl_fd(file, 2);
 		return (1);
 	}
 	if (validate_content(game, content) != 0)
 	{
-        ft_putstr_fd("Error: Invalid file", 2);
-        ft_putendl_fd(file, 2);
+		ft_putstr_fd("Error: Invalid file", 2);
+		ft_putendl_fd(file, 2);
 		return (1);
 	}
 	return (0);
