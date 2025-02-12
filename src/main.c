@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
+/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 21:05:41 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/11 16:30:41 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/12 19:32:41 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,10 @@ int	cleanup(t_game *game)
 	if (game->window.win)
 		mlx_destroy_window(game->window.mlx, game->window.win);
 	if (game->window.mlx)
-	{
-		if (IS_LINUX)
-			mlx_destroy_display(game->window.mlx);
+    {
+        #ifdef __linux__
+        mlx_destroy_display(game->window.mlx); // Linux の場合のみ X サーバーの接続を閉じる
+        #endif
 		free(game->window.mlx);
 	}
 	gc_clean();

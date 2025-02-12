@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hook_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
+/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 10:58:40 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/12 17:29:55 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/12 19:39:22 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,11 @@ int	esc_handler(int keycode, void *mlx)
 {
 	if (keycode == ESC_KEY)
 	{
-		if (IS_LINUX)
+		#ifdef __linux__
 			mlx_loop_end(mlx);
-		else
+		#else
 			mlx_destroy_window(mlx, ((t_game *)mlx)->window.win);
+		#endif
 		exit(0);
 	}
 	if (keycode == A_KEY)

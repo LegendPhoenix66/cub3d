@@ -17,6 +17,7 @@ OBJDIR = obj
 
 # MinilibX
 ifeq ($(OS), Darwin) # macOS
+	CFLAGS += -D__APPLE__
     # macOS MiniLibX setup
     MLX = minilibx_opengl_20191021
     MLX_LIB = $(addprefix $(MLX)/,libmlx.a)

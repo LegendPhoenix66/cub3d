@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
+/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/12 17:25:10 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/12 19:28:24 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 
 # ifdef __APPLE__
 #  define ESC_KEY 53 // macOS Escape key
-#  define W_KEY
-#  define A_KEY
-#  define S_KEY
-#  define D_KEY
-#  define LEFT_ARROW_KEY
-#  define RIGHT_ARROW_KEY
-#  define IS_LINUX 0
+#  define W_KEY 13
+#  define A_KEY 0
+#  define S_KEY 1
+#  define D_KEY 2
+#  define LEFT_ARROW_KEY 123
+#  define RIGHT_ARROW_KEY 124
+#  define IS_LINUX 2
 # elif defined(__linux__)
 #  include <X11/keysym.h>
 #  define ESC_KEY XK_Escape
