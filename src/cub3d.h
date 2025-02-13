@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
+/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/13 20:24:58 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/13 20:59:07 by kuehara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,8 @@ typedef struct s_minimap
 	double	dir_x;
 	double	dir_y;
 	int		color;
-	int		player_center_x;
-	int		player_center_y;
+	float	player_center_x;
+	float	player_center_y;
 }	t_minimap;
 
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_minimap.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
+/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 00:23:13 by ueharakeiji       #+#    #+#             */
-/*   Updated: 2025/02/13 20:32:35 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/13 21:10:02 by kuehara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,27 +62,27 @@ void draw_player(t_game *game, t_minimap *mini)
 {
 	int px;
 	int py;
-	int off_x;
-	int off_y;
 
-	px = (int)(game->player.x_pos * mini->cell_size);
-	py = (int)(game->player.y_pos * mini->cell_size);
-	off_y = -4;
-	while (off_y <= 4)
+    mini->player_center_x = game->player.x_pos + 0.5f;
+    mini->player_center_y = game->player.y_pos + 0.5f;
+    px = (int)(mini->player_center_x * mini->cell_size);
+    py = (int)(mini->player_center_y * mini->cell_size);
+	mini->offset_y = -4;
+	while (mini->offset_y <= 4)
 	{
-		off_x = -4;
-		while (off_x <= 4)
+		mini->offset_x = -4;
+		while (mini->offset_x <= 4)
 		{
 			mlx_pixel_put(
 				game->window.mlx,
 				game->window.win,
-				px + off_x,
-				py + off_y,
+				px + mini->offset_x,
+				py + mini->offset_y,
 				0xFF0000
 			);
-			off_x++;
+			mini->offset_x++;
 		}
-		off_y++;
+		mini->offset_y++;
 	}
 }
 
