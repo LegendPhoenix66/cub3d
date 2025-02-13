@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/12 20:28:15 by kuehara          ###   ########.fr       */
+/*   Updated: 2025/02/13 01:00:08 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 #  define D_KEY 2
 #  define LEFT_ARROW_KEY 123
 #  define RIGHT_ARROW_KEY 124
-#  define IS_LINUX 2
+#  define IS_LINUX 0
 # elif defined(__linux__)
 #  include <X11/keysym.h>
 #  define ESC_KEY XK_Escape
@@ -73,12 +73,16 @@ typedef struct s_game
 {
 	t_window	window;
 	char		**map;
+	int			**int_map;
 	t_image		*east_texture;
 	t_image		*north_texture;
 	t_image		*south_texture;
 	t_image		*west_texture;
 	int			floor_color;
 	int			ceiling_color;
+	double		player_x;
+	double		player_y;
+	int			map_line_count;
 }				t_game;
 
 // check_args.c
@@ -88,6 +92,12 @@ void			check_args(int argc, char **argv);
 int				is_file_valid(t_game *game, char *file);
 
 // validate_map.c
+
+// parsing_map.c
+int				**parsing_map(char **map, int map_line_count);
+
+// drawing_minimap.c
+void draw_minimap(t_game *game, int **int_map, double player_x, double player_y);
 
 // hook_handler.c
 int				esc_handler(int keycode, void *mlx);

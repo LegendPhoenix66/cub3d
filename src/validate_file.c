@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate_file.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
+/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:43:58 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/12 19:06:37 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/13 00:53:02 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,6 +296,7 @@ int	rgb_to_hex(char *color_str)
 void	copy_map_to_game(t_game *game, t_file_data *file_data)
 {
 	game->map = file_data->map_lines;
+	game->map_line_count = file_data->map_line_count;
 }
 
 void	add_to_game(t_game *game, t_file_data *file_data)
