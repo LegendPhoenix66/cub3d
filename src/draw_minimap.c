@@ -6,64 +6,91 @@
 /*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 00:23:13 by ueharakeiji       #+#    #+#             */
-/*   Updated: 2025/02/13 01:18:14 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/13 08:36:00 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void draw_minimap(t_game *game, int **int_map, double player_x, double player_y)
+void fill_one_cell(t_game *game, t_minimap *mini, int row, int col)
 {
-	int i;
-	int j;
-	int cell_size;
-	int color;
+	int x;
+	int y;
+
+	y = 0;
+	while (y < mini->cell_size)
+	{
+		x = 0;
+		while (x < mini->cell_size)
+		{
+			mlx_pixel_put(
+				game->window.mlx,
+				game->window.win,
+				col * mini->cell_size + x,
+				row * mini->cell_size + y,
+				mini->color
+			);
+			x++;
+		}
+		y++;
+	}
+}
+
+void draw_map_cells(t_game *game, int **int_map, t_minimap *mini)
+{
+	int row;
+	int col;
+
+	row = 0;
+	while (int_map[row] != NULL)
+	{
+		col = 0;
+		while (int_map[row][col] != -1)
+		{
+			if (int_map[row][col] == 1)
+				mini->color = 0xFFFFFF;
+			else
+				mini->color = 0xAAAAAA;
+			fill_one_cell(game, mini, row, col);
+			col++;
+		}
+		row++;
+	}
+}
+
+void draw_player(t_game *game, t_minimap *mini)
+{
 	int px;
 	int py;
+	int off_x;
+	int off_y;
 
-	cell_size = 10;
-	i = 0;
-	while (int_map[i] != NULL)
+	px = (int)(game->player_x * mini->cell_size);
+	py = (int)(game->player_y * mini->cell_size);
+	off_y = -4;
+	while (off_y <= 4)
 	{
-		j = 0;
-		while (int_map[i][j] != -1)
+		off_x = -4;
+		while (off_x <= 4)
 		{
-			if (int_map[i][j] == 1)
-				color = 0xFFFFFF;  // white
-			else
-				color = 0xAAAAAA;  // grey
-			{
-				int y = 0;
-				while (y < cell_size)
-				{
-					int x = 0;
-					while (x < cell_size)
-					{
-						mlx_pixel_put(game->window.mlx, game->window.win,
-							j * cell_size + x, i * cell_size + y, color);
-						x++;
-					}
-					y++;
-				}
-			}
-			j++;
+			mlx_pixel_put(
+				game->window.mlx,
+				game->window.win,
+				px + off_x,
+				py + off_y,
+				0xFF0000
+			);
+			off_x++;
 		}
-		i++;
+		off_y++;
 	}
-	px = (int)(player_x * cell_size);
-	py = (int)(player_y * cell_size);
-	{
-		int dy = -4;
-		while (dy <= 4)
-		{
-			int dx = -4;
-			while (dx <= 4)
-			{
-				mlx_pixel_put(game->window.mlx, game->window.win,
-					px + dx, py + dy, 0xFF0000); // red
-				dx++;
-			}
-			dy++;
-		}
-	}
+}
+
+void draw_minimap(t_game *game, int **int_map)
+{
+	t_minimap mini;
+
+	mini.cell_size = 10;
+	draw_map_cells(game, int_map, &mini);
+	draw_player(game, &mini);
 }

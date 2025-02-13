@@ -89,6 +89,19 @@ typedef struct s_game
 	int			ceiling_color;
 }				t_game;
 
+typedef struct s_minimap
+{
+	int		cell_size;
+	int		offset_x;
+	int		offset_y;
+	double	dir_x;
+	double	dir_y;
+	int		color;
+	int		player_center_x;
+	int		player_center_y;
+}	t_minimap;
+
+
 // check_args.c
 void			check_args(int argc, char **argv);
 
@@ -101,8 +114,10 @@ int				is_file_valid(t_game *game, char *file);
 int				**parsing_map(char **map, int map_line_count);
 
 // drawing_minimap.c
-// void			draw_minimap(t_game *game, int **int_map, double player_x,
-//					double player_y);
+//void	fill_one_cell(t_game *game, t_minimap *m, int row, int col);
+//void	draw_map_cells(t_game *game, int **int_map, t_minimap *m);
+//void	draw_player(t_game *game, t_minimap *m);
+//void	draw_minimap(t_game *game, int **int_map);
 
 // hook_handler.c
 int				esc_handler(int keycode, void *mlx);
