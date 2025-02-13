@@ -65,8 +65,8 @@ void draw_player(t_game *game, t_minimap *mini)
 	int off_x;
 	int off_y;
 
-	px = (int)(game->player_x * mini->cell_size);
-	py = (int)(game->player_y * mini->cell_size);
+	px = (int)(game->player.x_pos * mini->cell_size);
+	py = (int)(game->player.y_pos * mini->cell_size);
 	off_y = -4;
 	while (off_y <= 4)
 	{
