@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_minimap.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
+/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 00:23:13 by ueharakeiji       #+#    #+#             */
-/*   Updated: 2025/02/13 08:36:00 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/13 20:32:35 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,18 @@ void fill_one_cell(t_game *game, t_minimap *mini, int row, int col)
 	}
 }
 
-void draw_map_cells(t_game *game, int **int_map, t_minimap *mini)
+void draw_map_cells(t_game *game, t_minimap *mini)
 {
 	int row;
 	int col;
 
 	row = 0;
-	while (int_map[row] != NULL)
+	while (game->map[row] != NULL)
 	{
 		col = 0;
-		while (int_map[row][col] != -1)
+		while (game->map[row][col] != INT_MIN)
 		{
-			if (int_map[row][col] == 1)
+			if (game->map[row][col] == 1)
 				mini->color = 0xFFFFFF;
 			else
 				mini->color = 0xAAAAAA;
@@ -86,11 +86,11 @@ void draw_player(t_game *game, t_minimap *mini)
 	}
 }
 
-void draw_minimap(t_game *game, int **int_map)
+void draw_minimap(t_game *game)
 {
 	t_minimap mini;
 
 	mini.cell_size = 10;
-	draw_map_cells(game, int_map, &mini);
+	draw_map_cells(game, &mini);
 	draw_player(game, &mini);
 }

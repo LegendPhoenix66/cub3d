@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 21:05:41 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/13 16:43:57 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/13 20:24:58 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	main(int argc, char **argv)
 				game.window.height, "cub3d");
 		mlx_hook(game.window.win, DESTROY_NOTIFY, 0, &close_window, &game);
 		mlx_key_hook(game.window.win, &esc_handler, game.window.mlx);
-		// draw_minimap(&game);
+		draw_minimap(&game);
 		mlx_loop(game.window.mlx);
 	}
 	cleanup(&game);

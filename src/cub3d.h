@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/13 14:56:04 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/13 20:24:58 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ int				**parsing_map(char **map, int map_line_count);
 //void	fill_one_cell(t_game *game, t_minimap *m, int row, int col);
 //void	draw_map_cells(t_game *game, int **int_map, t_minimap *m);
 //void	draw_player(t_game *game, t_minimap *m);
-//void	draw_minimap(t_game *game, int **int_map);
+void	draw_minimap(t_game *game);
 
 // hook_handler.c
 int				esc_handler(int keycode, void *mlx);

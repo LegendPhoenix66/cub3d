@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:43:58 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/13 16:46:51 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/13 20:35:24 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,16 +301,18 @@ int	copy_map_to_game(t_game *game, t_file_data *file_data)
 	int	y;
 	int	x;
 
-	game->map = gc_malloc(sizeof(int *) * file_data->map_line_count);
+	game->map = gc_malloc(sizeof(int *) * (file_data->map_line_count + 1));
 	if (!game->map)
 		return (0);
-	for (y = 0; y < file_data->map_line_count; y++)
+    game->map[file_data->map_line_count] = NULL;
+    for (y = 0; y < file_data->map_line_count; y++)
 	{
 		game->map[y] = gc_malloc(sizeof(int)
-				* ft_strlen(file_data->map_lines[y]));
+				* (ft_strlen(file_data->map_lines[y]) + 1));
 		if (!game->map[y])
 			return (0);
-	}
+        game->map[y][ft_strlen(file_data->map_lines[y])] = INT_MIN;
+    }
 	for (y = 0; y < file_data->map_line_count; y++)
 	{
 		for (x = 0; file_data->map_lines[y][x] != '\0'; x++)
