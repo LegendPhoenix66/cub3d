@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
+/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/13 01:00:08 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/13 14:56:04 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,13 @@ typedef struct s_image
 	int			height;
 }				t_image;
 
+typedef struct s_player
+{
+	float		x_pos;
+	float		y_pos;
+	int			orientation;
+}				t_player;
+
 typedef struct s_window
 {
 	void		*mlx;
@@ -72,17 +79,14 @@ typedef struct s_window
 typedef struct s_game
 {
 	t_window	window;
-	char		**map;
-	int			**int_map;
+	t_player	player;
+	int			**map;
 	t_image		*east_texture;
 	t_image		*north_texture;
 	t_image		*south_texture;
 	t_image		*west_texture;
 	int			floor_color;
 	int			ceiling_color;
-	double		player_x;
-	double		player_y;
-	int			map_line_count;
 }				t_game;
 
 // check_args.c
@@ -97,9 +101,10 @@ int				is_file_valid(t_game *game, char *file);
 int				**parsing_map(char **map, int map_line_count);
 
 // drawing_minimap.c
-void draw_minimap(t_game *game, int **int_map, double player_x, double player_y);
+// void			draw_minimap(t_game *game, int **int_map, double player_x,
+//					double player_y);
 
 // hook_handler.c
 int				esc_handler(int keycode, void *mlx);
-int 			close_window(void *param);
+int				close_window(void *param);
 #endif // CUB3D_H

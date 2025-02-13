@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate_file.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
+/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:43:58 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/13 00:53:02 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/13 16:46:51 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,27 +105,30 @@ int	process_texture_line(t_file_data *file_data, char *line)
 {
 	char	*texture_path;
 
-	texture_path = gc_strdup(line + 3);
+	if (ft_strncmp(line, "NO ", 3) == 0 || ft_strncmp(line, "SO ", 3) == 0
+		|| ft_strncmp(line, "WE ", 3) == 0 || ft_strncmp(line, "EA ", 3) == 0)
+	{
+		texture_path = gc_strdup(line + 3);
+	}
+	else
+	{
+		return (0);
+	}
 	if (access(texture_path, F_OK) != 0)
 	{
 		ft_putstr_fd("Error: Texture file not found: ", 2);
 		ft_putendl_fd(texture_path, 2);
+		gc_free(texture_path);
 		return (0);
 	}
 	if (ft_strncmp(line, "NO ", 3) == 0)
-		file_data->north_texture = gc_strdup(line + 3);
+		file_data->north_texture = texture_path;
 	else if (ft_strncmp(line, "SO ", 3) == 0)
-		file_data->south_texture = gc_strdup(line + 3);
+		file_data->south_texture = texture_path;
 	else if (ft_strncmp(line, "WE ", 3) == 0)
-		file_data->west_texture = gc_strdup(line + 3);
+		file_data->west_texture = texture_path;
 	else if (ft_strncmp(line, "EA ", 3) == 0)
-		file_data->east_texture = gc_strdup(line + 3);
-	else
-	{
-		ft_putstr_fd("Error: Invalid texture descriptor: ", 2);
-		ft_putendl_fd(line, 2);
-		return (0);
-	}
+		file_data->east_texture = texture_path;
 	return (1);
 }
 
@@ -293,33 +296,81 @@ int	rgb_to_hex(char *color_str)
 	return ((r << 16) | (g << 8) | b);
 }
 
-void	copy_map_to_game(t_game *game, t_file_data *file_data)
+int	copy_map_to_game(t_game *game, t_file_data *file_data)
 {
-	game->map = file_data->map_lines;
-	game->map_line_count = file_data->map_line_count;
+	int	y;
+	int	x;
+
+	game->map = gc_malloc(sizeof(int *) * file_data->map_line_count);
+	if (!game->map)
+		return (0);
+	for (y = 0; y < file_data->map_line_count; y++)
+	{
+		game->map[y] = gc_malloc(sizeof(int)
+				* ft_strlen(file_data->map_lines[y]));
+		if (!game->map[y])
+			return (0);
+	}
+	for (y = 0; y < file_data->map_line_count; y++)
+	{
+		for (x = 0; file_data->map_lines[y][x] != '\0'; x++)
+		{
+			if (file_data->map_lines[y][x] == '0')
+				game->map[y][x] = 0;
+			else if (file_data->map_lines[y][x] == '1')
+				game->map[y][x] = 1;
+			else if (file_data->map_lines[y][x] == ' ')
+				game->map[y][x] = -1;
+			else if (file_data->map_lines[y][x] == 'N'
+				|| file_data->map_lines[y][x] == 'S'
+				|| file_data->map_lines[y][x] == 'E'
+				|| file_data->map_lines[y][x] == 'W')
+			{
+				game->player.x_pos = x;
+				game->player.y_pos = y;
+				if (file_data->map_lines[y][x] == 'N')
+					game->player.orientation = 0;
+				else if (file_data->map_lines[y][x] == 'S')
+					game->player.orientation = 180;
+				else if (file_data->map_lines[y][x] == 'E')
+					game->player.orientation = 90;
+				else if (file_data->map_lines[y][x] == 'W')
+					game->player.orientation = 270;
+				game->map[y][x] = 0;
+			}
+			else
+			{
+				ft_putstr_fd("Error: Invalid character in map: ", 2);
+				ft_putchar_fd(file_data->map_lines[y][x], 2);
+				ft_putchar_fd('\n', 2);
+				return (0);
+			}
+		}
+	}
+	return (1);
 }
 
-void	add_to_game(t_game *game, t_file_data *file_data)
+int	add_to_game(t_game *game, t_file_data *file_data)
 {
-	game->east_texture = gc_malloc(sizeof(t_image));
-	game->north_texture = gc_malloc(sizeof(t_image));
-	game->south_texture = gc_malloc(sizeof(t_image));
-	game->west_texture = gc_malloc(sizeof(t_image));
 	game->ceiling_color = rgb_to_hex(file_data->ceiling_color_str);
 	game->floor_color = rgb_to_hex(file_data->floor_color_str);
+	game->east_texture = gc_malloc(sizeof(t_image));
 	game->east_texture->img = mlx_xpm_file_to_image(game->window.mlx,
 			file_data->east_texture, &game->east_texture->width,
 			&game->east_texture->height);
+	game->north_texture = gc_malloc(sizeof(t_image));
 	game->north_texture->img = mlx_xpm_file_to_image(game->window.mlx,
 			file_data->north_texture, &game->north_texture->width,
 			&game->north_texture->height);
+	game->south_texture = gc_malloc(sizeof(t_image));
 	game->south_texture->img = mlx_xpm_file_to_image(game->window.mlx,
 			file_data->south_texture, &game->south_texture->width,
 			&game->south_texture->height);
+	game->west_texture = gc_malloc(sizeof(t_image));
 	game->west_texture->img = mlx_xpm_file_to_image(game->window.mlx,
 			file_data->west_texture, &game->west_texture->width,
 			&game->west_texture->height);
-	copy_map_to_game(game, file_data);
+	return (copy_map_to_game(game, file_data));
 }
 
 int	validate_content(t_game *game, char *content)
