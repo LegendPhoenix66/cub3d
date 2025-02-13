@@ -6,7 +6,7 @@
 /*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/13 08:06:11 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/13 08:32:24 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,15 +87,16 @@ typedef struct s_game
 
 typedef struct s_minimap
 {
-	int i;
-	int j;
-	int cell_size;
-	int color;
-	int px;
-	int py;
-	int dx;
-	int dy;
+	int		cell_size;
+	int		offset_x;
+	int		offset_y;
+	double	dir_x;
+	double	dir_y;
+	int		color;
+	int		player_center_x;
+	int		player_center_y;
 }	t_minimap;
+
 
 // check_args.c
 void			check_args(int argc, char **argv);
@@ -109,7 +110,10 @@ int				is_file_valid(t_game *game, char *file);
 int				**parsing_map(char **map, int map_line_count);
 
 // drawing_minimap.c
-void draw_minimap(t_game *game, int **int_map);
+void	fill_one_cell(t_game *game, t_minimap *m, int row, int col);
+void	draw_map_cells(t_game *game, int **int_map, t_minimap *m);
+void	draw_player(t_game *game, t_minimap *m);
+void	draw_minimap(t_game *game, int **int_map);
 
 // hook_handler.c
 int				esc_handler(int keycode, void *mlx);
