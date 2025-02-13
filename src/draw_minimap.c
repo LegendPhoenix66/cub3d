@@ -6,16 +6,16 @@
 /*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 00:23:13 by ueharakeiji       #+#    #+#             */
-/*   Updated: 2025/02/13 21:10:02 by kuehara          ###   ########.fr       */
+/*   Updated: 2025/02/13 21:17:53 by kuehara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void fill_one_cell(t_game *game, t_minimap *mini, int row, int col)
+void	fill_one_cell(t_game *game, t_minimap *mini, int row, int col)
 {
-	int x;
-	int y;
+	int	x;
+	int	y;
 
 	y = 0;
 	while (y < mini->cell_size)
@@ -29,17 +29,17 @@ void fill_one_cell(t_game *game, t_minimap *mini, int row, int col)
 				col * mini->cell_size + x,
 				row * mini->cell_size + y,
 				mini->color
-			);
+				);
 			x++;
 		}
 		y++;
 	}
 }
 
-void draw_map_cells(t_game *game, t_minimap *mini)
+void	draw_map_cells(t_game *game, t_minimap *mini)
 {
-	int row;
-	int col;
+	int	row;
+	int	col;
 
 	row = 0;
 	while (game->map[row] != NULL)
@@ -58,15 +58,15 @@ void draw_map_cells(t_game *game, t_minimap *mini)
 	}
 }
 
-void draw_player(t_game *game, t_minimap *mini)
+void	draw_player(t_game *game, t_minimap *mini)
 {
-	int px;
-	int py;
+	int	px;
+	int	py;
 
-    mini->player_center_x = game->player.x_pos + 0.5f;
-    mini->player_center_y = game->player.y_pos + 0.5f;
-    px = (int)(mini->player_center_x * mini->cell_size);
-    py = (int)(mini->player_center_y * mini->cell_size);
+	mini->player_center_x = game->player.x_pos + 0.5f;
+	mini->player_center_y = game->player.y_pos + 0.5f;
+	px = (int)(mini->player_center_x * mini->cell_size);
+	py = (int)(mini->player_center_y * mini->cell_size);
 	mini->offset_y = -4;
 	while (mini->offset_y <= 4)
 	{
@@ -79,16 +79,16 @@ void draw_player(t_game *game, t_minimap *mini)
 				px + mini->offset_x,
 				py + mini->offset_y,
 				0xFF0000
-			);
+				);
 			mini->offset_x++;
 		}
 		mini->offset_y++;
 	}
 }
 
-void draw_minimap(t_game *game)
+void	draw_minimap(t_game *game)
 {
-	t_minimap mini;
+	t_minimap	mini;
 
 	mini.cell_size = 10;
 	draw_map_cells(game, &mini);

@@ -6,7 +6,7 @@
 /*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/13 20:59:07 by kuehara          ###   ########.fr       */
+/*   Updated: 2025/02/13 21:13:29 by kuehara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,10 +114,7 @@ int				is_file_valid(t_game *game, char *file);
 int				**parsing_map(char **map, int map_line_count);
 
 // drawing_minimap.c
-//void	fill_one_cell(t_game *game, t_minimap *m, int row, int col);
-//void	draw_map_cells(t_game *game, int **int_map, t_minimap *m);
-//void	draw_player(t_game *game, t_minimap *m);
-void	draw_minimap(t_game *game);
+void			draw_minimap(t_game *game);
 
 // hook_handler.c
 int				esc_handler(int keycode, void *mlx);
