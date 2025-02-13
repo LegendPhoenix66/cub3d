@@ -6,64 +6,61 @@
 /*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 00:23:13 by ueharakeiji       #+#    #+#             */
-/*   Updated: 2025/02/13 01:18:14 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/13 08:09:40 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void draw_minimap(t_game *game, int **int_map, double player_x, double player_y)
+void draw_minimap(t_game *game, int **int_map)
 {
-	int i;
-	int j;
-	int cell_size;
-	int color;
-	int px;
-	int py;
+	t_minimap m;
 
-	cell_size = 10;
-	i = 0;
-	while (int_map[i] != NULL)
+	m.cell_size = 10;
+
+	m.i = 0;
+	while (int_map[m.i] != NULL)
 	{
-		j = 0;
-		while (int_map[i][j] != -1)
+		m.j = 0;
+		while (int_map[m.i][m.j] != -1)
 		{
-			if (int_map[i][j] == 1)
-				color = 0xFFFFFF;  // white
+			if (int_map[m.i][m.j] == 1)
+				m.color = 0xFFFFFF;
 			else
-				color = 0xAAAAAA;  // grey
+				m.color = 0xAAAAAA;
 			{
 				int y = 0;
-				while (y < cell_size)
+				while (y < m.cell_size)
 				{
 					int x = 0;
-					while (x < cell_size)
+					while (x < m.cell_size)
 					{
 						mlx_pixel_put(game->window.mlx, game->window.win,
-							j * cell_size + x, i * cell_size + y, color);
+							m.j * m.cell_size + x,
+							m.i * m.cell_size + y,
+							m.color);
 						x++;
 					}
 					y++;
 				}
 			}
-			j++;
+			m.j++;
 		}
-		i++;
+		m.i++;
 	}
-	px = (int)(player_x * cell_size);
-	py = (int)(player_y * cell_size);
+	m.px = (int)(game->player_x * m.cell_size);
+	m.py = (int)(game->player_y * m.cell_size);
+
+	m.dy = -4;
+	while (m.dy <= 4)
 	{
-		int dy = -4;
-		while (dy <= 4)
+		m.dx = -4;
+		while (m.dx <= 4)
 		{
-			int dx = -4;
-			while (dx <= 4)
-			{
-				mlx_pixel_put(game->window.mlx, game->window.win,
-					px + dx, py + dy, 0xFF0000); // red
-				dx++;
-			}
-			dy++;
+			mlx_pixel_put(game->window.mlx, game->window.win,
+				m.px + m.dx, m.py + m.dy, 0xFF0000); //red
+			m.dx++;
 		}
+		m.dy++;
 	}
 }

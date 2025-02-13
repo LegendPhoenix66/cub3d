@@ -6,7 +6,7 @@
 /*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 21:05:41 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/13 01:02:30 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/13 07:58:56 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	main(int argc, char **argv)
 		mlx_hook(game.window.win, DESTROY_NOTIFY, 0, &close_window,
 			&game);
 		mlx_key_hook(game.window.win, &esc_handler, game.window.mlx);
-		draw_minimap(&game, game.int_map, game.player_x, game.player_y);
+		draw_minimap(&game, game.int_map);
 		mlx_loop(game.window.mlx);
 	}
 	cleanup(&game);

@@ -6,7 +6,7 @@
 /*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/13 01:00:08 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/13 08:06:11 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,18 @@ typedef struct s_game
 	int			map_line_count;
 }				t_game;
 
+typedef struct s_minimap
+{
+	int i;
+	int j;
+	int cell_size;
+	int color;
+	int px;
+	int py;
+	int dx;
+	int dy;
+}	t_minimap;
+
 // check_args.c
 void			check_args(int argc, char **argv);
 
@@ -97,7 +109,7 @@ int				is_file_valid(t_game *game, char *file);
 int				**parsing_map(char **map, int map_line_count);
 
 // drawing_minimap.c
-void draw_minimap(t_game *game, int **int_map, double player_x, double player_y);
+void draw_minimap(t_game *game, int **int_map);
 
 // hook_handler.c
 int				esc_handler(int keycode, void *mlx);
