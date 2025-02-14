@@ -49,8 +49,10 @@ void	draw_map_cells(t_game *game, t_minimap *mini)
 		{
 			if (game->map[row][col] == 1)
 				mini->color = 0xFFFFFF;
-			else
+			else if (game->map[row][col] == 0)
 				mini->color = 0xAAAAAA;
+            else
+                mini->color = 0x000000;
 			fill_one_cell(game, mini, row, col);
 			col++;
 		}
