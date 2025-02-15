@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/13 21:13:29 by kuehara          ###   ########.fr       */
+/*   Updated: 2025/02/15 23:20:24 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,13 +92,13 @@ typedef struct s_game
 typedef struct s_minimap
 {
 	int		cell_size;
-	int		offset_x;
-	int		offset_y;
 	double	dir_x;
 	double	dir_y;
 	int		color;
 	float	player_center_x;
 	float	player_center_y;
+	char	*img_data;      // 画像のピクセルデータ
+	int		img_size_line;  // 画像1行のバイト数
 }	t_minimap;
 
 

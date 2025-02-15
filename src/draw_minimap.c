@@ -3,96 +3,108 @@
 /*                                                        :::      ::::::::   */
 /*   draw_minimap.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 00:23:13 by ueharakeiji       #+#    #+#             */
-/*   Updated: 2025/02/13 21:17:53 by kuehara          ###   ########.fr       */
+/*   Updated: 2025/02/15 23:19:42 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	fill_one_cell(t_game *game, t_minimap *mini, int row, int col)
+static void	put_pixel_to_img(t_minimap *m, int x, int y, int color)
 {
+	int	offset;
+
+	offset = (y * m->img_size_line) + (x * 4);
+	m->img_data[offset] = color & 0xFF;
+	m->img_data[offset + 1] = (color >> 8) & 0xFF;
+	m->img_data[offset + 2] = (color >> 16) & 0xFF;
+	m->img_data[offset + 3] = 0;
+}
+
+static void	fill_cell(t_minimap *m, int row, int col)
+{
+	int	base_x;
+	int	base_y;
 	int	x;
 	int	y;
 
+	base_x = col * m->cell_size;
+	base_y = row * m->cell_size;
 	y = 0;
-	while (y < mini->cell_size)
+	while (y < m->cell_size)
 	{
 		x = 0;
-		while (x < mini->cell_size)
+		while (x < m->cell_size)
 		{
-			mlx_pixel_put(
-				game->window.mlx,
-				game->window.win,
-				col * mini->cell_size + x,
-				row * mini->cell_size + y,
-				mini->color
-				);
+			put_pixel_to_img(m, base_x + x, base_y + y, m->color);
 			x++;
 		}
 		y++;
 	}
 }
 
-void	draw_map_cells(t_game *game, t_minimap *mini)
+static void	draw_map(t_game *game, t_minimap *m)
 {
 	int	row;
 	int	col;
 
 	row = 0;
-	while (game->map[row] != NULL)
+	while (game->map[row])
 	{
 		col = 0;
 		while (game->map[row][col] != INT_MIN)
 		{
 			if (game->map[row][col] == 1)
-				mini->color = 0xFFFFFF;
+				m->color = 0x696969;
 			else if (game->map[row][col] == 0)
-				mini->color = 0xAAAAAA;
-            else
-                mini->color = 0x000000;
-			fill_one_cell(game, mini, row, col);
+				m->color = 0x3E1F0D;
+			else
+				m->color = 0x000000;
+			fill_cell(m, row, col);
 			col++;
 		}
 		row++;
 	}
 }
 
-void	draw_player(t_game *game, t_minimap *mini)
+static void	draw_player(t_game *game, t_minimap *m)
 {
 	int	px;
 	int	py;
+	int	offset_x;
+	int	offset_y;
 
-	mini->player_center_x = game->player.x_pos + 0.5f;
-	mini->player_center_y = game->player.y_pos + 0.5f;
-	px = (int)(mini->player_center_x * mini->cell_size);
-	py = (int)(mini->player_center_y * mini->cell_size);
-	mini->offset_y = -4;
-	while (mini->offset_y <= 4)
+	px = (int)((game->player.x_pos + 0.5f) * m->cell_size);
+	py = (int)((game->player.y_pos + 0.5f) * m->cell_size);
+	offset_y = -4;
+	while (offset_y <= 4)
 	{
-		mini->offset_x = -4;
-		while (mini->offset_x <= 4)
+		offset_x = -4;
+		while (offset_x <= 4)
 		{
-			mlx_pixel_put(
-				game->window.mlx,
-				game->window.win,
-				px + mini->offset_x,
-				py + mini->offset_y,
-				0xFF0000
-				);
-			mini->offset_x++;
+			put_pixel_to_img(m, px + offset_x, py + offset_y, 0xFF0000);
+			offset_x++;
 		}
-		mini->offset_y++;
+		offset_y++;
 	}
 }
 
 void	draw_minimap(t_game *game)
 {
-	t_minimap	mini;
+	t_minimap	m;
+	int			info[3];
+	void		*img;
 
-	mini.cell_size = 10;
-	draw_map_cells(game, &mini);
-	draw_player(game, &mini);
+	m.cell_size = 10;
+	img = mlx_new_image(game->window.mlx,
+			game->window.width,
+			game->window.height);
+	m.img_data = mlx_get_data_addr(img, &info[0], &info[1], &info[2]);
+	m.img_size_line = info[1];
+	draw_map(game, &m);
+	draw_player(game, &m);
+	mlx_put_image_to_window(game->window.mlx, game->window.win, img, 0, 0);
+	mlx_destroy_image(game->window.mlx, img);
 }
