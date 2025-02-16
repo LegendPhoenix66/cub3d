@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_minimap.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
+/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 00:23:13 by ueharakeiji       #+#    #+#             */
-/*   Updated: 2025/02/15 23:19:42 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/16 12:30:24 by kuehara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,11 @@ static void	draw_player(t_game *game, t_minimap *m)
 
 	px = (int)((game->player.x_pos + 0.5f) * m->cell_size);
 	py = (int)((game->player.y_pos + 0.5f) * m->cell_size);
-	offset_y = -4;
-	while (offset_y <= 4)
+	offset_y = -2;
+	while (offset_y <= 2)
 	{
-		offset_x = -4;
-		while (offset_x <= 4)
+		offset_x = -2;
+		while (offset_x <= 2)
 		{
 			put_pixel_to_img(m, px + offset_x, py + offset_y, 0xFF0000);
 			offset_x++;

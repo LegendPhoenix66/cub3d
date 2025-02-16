@@ -7,7 +7,7 @@ CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
 # Files
 SRC = 	main.c hook_handler.c check_args.c validate_file.c \
-		parsing_map.c draw_minimap.c \
+		draw_minimap.c player_move.c \
 		garbage_collection/gc.c garbage_collection/gc_utils.c
 SRCS = $(addprefix $(SRCDIR)/, $(SRC))
 OBJ = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRCS))

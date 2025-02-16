@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
+/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 21:05:41 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/13 20:24:58 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/16 13:03:12 by kuehara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	cleanup(t_game *game)
 void	print_game(t_game *game)
 {
 	int	i;
+	int	j;
 
 	i = 0;
 	printf("File Data:\n");
@@ -54,13 +55,16 @@ void	print_game(t_game *game)
 	printf("Floor Color: %d\n", game->floor_color);
 	printf("Ceiling Color: %d\n", game->ceiling_color);
 	printf("Map Lines:\n");
-	for (i = 0; i < 5; i++)
+	while (i < 5)
 	{
-		for (int j = 0; j < 10; ++j)
+		j = 0;
+		while (j < 10)
 		{
 			printf("%d", game->map[i][j]);
+			j++;
 		}
 		printf("\n");
+		i++;
 	}
 }
 
@@ -82,11 +86,10 @@ int	main(int argc, char **argv)
 	if (is_file_valid(&game, argv[1]) == 0)
 	{
 		print_game(&game);
-		// game.map = parsing_map(game.map, game.map_line_count);
 		game.window.win = mlx_new_window(game.window.mlx, game.window.width,
 				game.window.height, "cub3d");
 		mlx_hook(game.window.win, DESTROY_NOTIFY, 0, &close_window, &game);
-		mlx_key_hook(game.window.win, &esc_handler, game.window.mlx);
+		mlx_key_hook(game.window.win, &esc_handler, &game);
 		draw_minimap(&game);
 		mlx_loop(game.window.mlx);
 	}

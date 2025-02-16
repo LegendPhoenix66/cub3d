@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
+/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/15 23:20:24 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/16 13:12:18 by kuehara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@
 # include <fcntl.h>
 # include <mlx.h>
 # include <stdio.h>
+# include <math.h>
 
 typedef struct s_file_data
 {
@@ -97,10 +98,9 @@ typedef struct s_minimap
 	int		color;
 	float	player_center_x;
 	float	player_center_y;
-	char	*img_data;      // 画像のピクセルデータ
-	int		img_size_line;  // 画像1行のバイト数
+	char	*img_data;
+	int		img_size_line;
 }	t_minimap;
-
 
 // check_args.c
 void			check_args(int argc, char **argv);
@@ -110,8 +110,8 @@ int				is_file_valid(t_game *game, char *file);
 
 // validate_map.c
 
-// parsing_map.c
-int				**parsing_map(char **map, int map_line_count);
+// player_move.c
+void			player_move(t_game *game, int keycode);
 
 // drawing_minimap.c
 void			draw_minimap(t_game *game);
