@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate_file.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
+/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:43:58 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/17 11:36:48 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/17 14:45:24 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,6 +296,23 @@ int	rgb_to_hex(char *color_str)
 	return ((r << 16) | (g << 8) | b);
 }
 
+void *rgb_to_image(t_game *game, char *color_str) {
+    int height = game->window.height / 2;
+    int width = game->window.width;
+    int color = rgb_to_hex(color_str);
+
+    void *image = mlx_new_image(game->window.mlx, width, height);
+
+    int *data = (int *)mlx_get_data_addr(image, &(int){0}, &(int){0}, &(int){0});
+    int i = 0;
+    while (i < width * height) {
+        data[i] = color;
+        i++;
+    }
+
+    return (image);
+}
+
 int	copy_map_to_game(t_game *game, t_file_data *file_data)
 {
 	int	y;
@@ -354,8 +371,8 @@ int	copy_map_to_game(t_game *game, t_file_data *file_data)
 
 int	add_to_game(t_game *game, t_file_data *file_data)
 {
-	game->ceiling_color = rgb_to_hex(file_data->ceiling_color_str);
-	game->floor_color = rgb_to_hex(file_data->floor_color_str);
+	game->ceiling = rgb_to_image(game, file_data->ceiling_color_str);
+	game->floor = rgb_to_image(game, file_data->floor_color_str);
 	game->east_texture = gc_malloc(sizeof(t_image));
 	game->east_texture->img = mlx_xpm_file_to_image(game->window.mlx,
 			file_data->east_texture, &game->east_texture->width,

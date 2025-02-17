@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 21:05:41 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/17 14:22:10 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/17 14:46:46 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@ int	cleanup(t_game *game)
 		mlx_destroy_image(game->window.mlx, game->west_texture->img);
 	if (game->east_texture && game->east_texture->img)
 		mlx_destroy_image(game->window.mlx, game->east_texture->img);
+    if (game->floor && game->floor->img)
+        mlx_destroy_image(game->window.mlx, game->floor->img);
+    if (game->ceiling && game->ceiling->img) {
+        mlx_destroy_image(game->window.mlx, game->ceiling->img);
+    }
+
 	if (game->window.win)
 	{
 		mlx_destroy_window(game->window.mlx, game->window.win);
@@ -52,8 +58,8 @@ void	print_game(t_game *game)
 	printf("South Texture: %p\n", game->south_texture);
 	printf("West Texture: %p\n", game->west_texture);
 	printf("East Texture: %p\n", game->east_texture);
-	printf("Floor Color: %d\n", game->floor_color);
-	printf("Ceiling Color: %d\n", game->ceiling_color);
+	printf("Floor Texture: %p\n", game->floor);
+	printf("Ceiling Texture: %p\n", game->ceiling);
 	printf("Map Lines:\n");
 	while (i < 5)
 	{
