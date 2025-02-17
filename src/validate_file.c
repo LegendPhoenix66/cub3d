@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate_file.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
+/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:43:58 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/13 20:35:24 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/17 11:36:48 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -360,18 +360,30 @@ int	add_to_game(t_game *game, t_file_data *file_data)
 	game->east_texture->img = mlx_xpm_file_to_image(game->window.mlx,
 			file_data->east_texture, &game->east_texture->width,
 			&game->east_texture->height);
+	game->east_texture->addr = mlx_get_data_addr(game->east_texture->img,
+			&game->east_texture->bpp, &game->east_texture->line_length,
+			&game->east_texture->endian);
 	game->north_texture = gc_malloc(sizeof(t_image));
 	game->north_texture->img = mlx_xpm_file_to_image(game->window.mlx,
 			file_data->north_texture, &game->north_texture->width,
 			&game->north_texture->height);
+	game->north_texture->addr = mlx_get_data_addr(game->north_texture->img,
+			&game->north_texture->bpp, &game->north_texture->line_length,
+			&game->north_texture->endian);
 	game->south_texture = gc_malloc(sizeof(t_image));
 	game->south_texture->img = mlx_xpm_file_to_image(game->window.mlx,
 			file_data->south_texture, &game->south_texture->width,
 			&game->south_texture->height);
+	game->south_texture->addr = mlx_get_data_addr(game->south_texture->img,
+			&game->south_texture->bpp, &game->south_texture->line_length,
+			&game->south_texture->endian);
 	game->west_texture = gc_malloc(sizeof(t_image));
 	game->west_texture->img = mlx_xpm_file_to_image(game->window.mlx,
 			file_data->west_texture, &game->west_texture->width,
 			&game->west_texture->height);
+	game->west_texture->addr = mlx_get_data_addr(game->west_texture->img,
+			&game->west_texture->bpp, &game->west_texture->line_length,
+			&game->west_texture->endian);
 	return (copy_map_to_game(game, file_data));
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/16 13:12:18 by kuehara          ###   ########.fr       */
+/*   Updated: 2025/02/17 11:30:28 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,12 @@ typedef struct s_file_data
 typedef struct s_image
 {
 	void		*img;
+	void		*addr;       // 追加：ピクセルデータの先頭ポインタ
 	int			width;
 	int			height;
+	int			bpp;         // bits per pixel（必要なら）
+	int			line_length; // 1ラインあたりのバイト数（必要なら）
+	int			endian;      // エンディアン情報（必要なら）
 }				t_image;
 
 typedef struct s_player
@@ -109,6 +113,10 @@ void			check_args(int argc, char **argv);
 int				is_file_valid(t_game *game, char *file);
 
 // validate_map.c
+int				validate_map_closed(t_game *game);
+
+//render_3d.c
+void			render_3d(t_game *game);
 
 // player_move.c
 void			player_move(t_game *game, int keycode);
@@ -117,6 +125,6 @@ void			player_move(t_game *game, int keycode);
 void			draw_minimap(t_game *game);
 
 // hook_handler.c
-int				esc_handler(int keycode, void *mlx);
+int				esc_handler(int keycode, void *param);
 int				close_window(void *param);
 #endif // CUB3D_H

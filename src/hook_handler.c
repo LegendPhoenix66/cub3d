@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hook_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 10:58:40 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/16 13:10:52 by kuehara          ###   ########.fr       */
+/*   Updated: 2025/02/17 11:07:15 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	esc_handler(int keycode, void *param)
 		|| keycode == LEFT_ARROW_KEY || keycode == RIGHT_ARROW_KEY)
 	{
 		player_move(game, keycode);
+		render_3d(game);
 		draw_minimap(game);
 	}
 	else
