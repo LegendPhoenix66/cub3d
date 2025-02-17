@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
+/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 21:05:41 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/17 11:10:48 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/17 14:22:10 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ int	main(int argc, char **argv)
 				game.window.height, "cub3d");
 		mlx_hook(game.window.win, DESTROY_NOTIFY, 0, &close_window, &game);
 		mlx_key_hook(game.window.win, &esc_handler, &game);
+        mlx_hook(game.window.win, 2, 1L<<0, &movement_handler, &game);
 		render_3d(&game);
 		draw_minimap(&game);
 		mlx_loop(game.window.mlx);

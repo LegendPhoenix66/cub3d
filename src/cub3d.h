@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
+/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/17 11:30:28 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/17 14:22:10 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,5 +126,7 @@ void			draw_minimap(t_game *game);
 
 // hook_handler.c
 int				esc_handler(int keycode, void *param);
+int movement_handler(int keycode, void *param);
 int				close_window(void *param);
+
 #endif // CUB3D_H
