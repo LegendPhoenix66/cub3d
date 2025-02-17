@@ -42,7 +42,7 @@ LIBFT_INC = -I $(LIBFT)
 all: $(LIBFT_LIB) $(MLX_LIB) $(EXEC)
 
 $(EXEC): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT_LIB) $(MLX_LNK) -o $(EXEC)
+	$(CC) $(CFLAGS) $(OBJ) $(LIBFT_LIB) $(MLX_LNK) -lm -o $(EXEC)
 
 $(LIBFT_LIB):
 	$(MAKE) -C $(LIBFT) bonus
