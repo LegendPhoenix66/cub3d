@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
+/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/17 14:44:26 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/17 21:54:52 by kuehara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@
 
 # define DESTROY_NOTIFY 17
 
+#define MINIMAP_WIDTH  200
+#define MINIMAP_HEIGHT 200
+#define MINIMAP_POS_X  10
+#define MINIMAP_POS_Y  10
+
 # include "../libft/libft.h"
 # include "garbage_collection/gc.h"
 # include <fcntl.h>
@@ -49,8 +54,8 @@ typedef struct s_file_data
 	char		*south_texture;
 	char		*west_texture;
 	char		*east_texture;
-	char		*floor_color_str;
-	char		*ceiling_color_str;
+	char		*floor_texture;
+	char		*ceiling_texture;
 	char		**map_lines;
 	int			map_line_count;
 }				t_file_data;
@@ -58,12 +63,12 @@ typedef struct s_file_data
 typedef struct s_image
 {
 	void		*img;
-	void		*addr;       // 追加：ピクセルデータの先頭ポインタ
+	void		*addr;       
 	int			width;
 	int			height;
-	int			bpp;         // bits per pixel（必要なら）
-	int			line_length; // 1ラインあたりのバイト数（必要なら）
-	int			endian;      // エンディアン情報（必要なら）
+	int			bpp;        
+	int			line_length; 
+	int			endian;    
 }				t_image;
 
 typedef struct s_player
