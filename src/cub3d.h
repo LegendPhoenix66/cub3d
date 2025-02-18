@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/17 21:54:52 by kuehara          ###   ########.fr       */
+/*   Updated: 2025/02/18 01:46:37 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,48 @@ typedef struct s_minimap
 	int		img_size_line;
 }	t_minimap;
 
+// tile related
+typedef struct s_area
+{
+	int	sx;
+	int	sy;
+	int	ex;
+	int	ey;
+}	t_area;
+
+typedef struct s_mapinfo
+{
+	int		width;
+	int		height;
+	float	scale;
+}	t_mapinfo;
+
+// structure for tile calculation
+typedef struct s_draw_map
+{
+	int	row;
+	int	col;
+	int	tile;
+	int	start_x;
+	int	start_y;
+	int	end_x;
+	int	end_y;
+}	t_draw_map;
+
+// draw player related
+typedef struct s_player_draw
+{
+	int px;
+	int py;
+	int dx;
+	int dy;
+	int rx;
+	int ry;
+	int size;
+}	t_player_draw;
+
+
+
 // check_args.c
 void			check_args(int argc, char **argv);
 
@@ -128,6 +170,14 @@ void			player_move(t_game *game, int keycode);
 
 // drawing_minimap.c
 void			draw_minimap(t_game *game);
+// drawing_minimap_utils.c
+void	get_map_info(t_game *game, t_mapinfo *info);
+void	get_img_info(void *img, t_minimap *m);
+void	set_tile_color(t_minimap *m, int tile);
+
+// drawing_minimap_tiles.c
+void	put_pixel_to_img(t_minimap *m, int x, int y, int color);
+void	draw_map_scaled(t_game *game, t_minimap *m, t_mapinfo *info);
 
 // hook_handler.c
 int				esc_handler(int keycode, void *param);
