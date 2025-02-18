@@ -22,11 +22,6 @@ int	cleanup(t_game *game)
 		mlx_destroy_image(game->window.mlx, game->west_texture->img);
 	if (game->east_texture && game->east_texture->img)
 		mlx_destroy_image(game->window.mlx, game->east_texture->img);
-    if (game->floor && game->floor->img)
-        mlx_destroy_image(game->window.mlx, game->floor->img);
-    if (game->ceiling && game->ceiling->img) {
-        mlx_destroy_image(game->window.mlx, game->ceiling->img);
-    }
 
 	if (game->window.win)
 	{
@@ -58,8 +53,8 @@ void	print_game(t_game *game)
 	printf("South Texture: %p\n", game->south_texture);
 	printf("West Texture: %p\n", game->west_texture);
 	printf("East Texture: %p\n", game->east_texture);
-	printf("Floor Texture: %p\n", game->floor);
-	printf("Ceiling Texture: %p\n", game->ceiling);
+	printf("Floor Texture: %d\n", game->floor_color);
+	printf("Ceiling Texture: %d\n", game->ceiling_color);
 	printf("Map Lines:\n");
 	while (i < 5)
 	{
