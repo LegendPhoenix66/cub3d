@@ -6,11 +6,11 @@
 /*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 01:10:00 by ueharakeiji       #+#    #+#             */
-/*   Updated: 2025/02/18 01:25:22 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/18 23:15:59 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../cub3d.h"
 
 void	get_map_info(t_game *game, t_mapinfo *info)
 {

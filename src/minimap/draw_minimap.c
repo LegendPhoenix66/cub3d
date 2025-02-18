@@ -3,36 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   draw_minimap.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
+/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 01:06:13 by ueharakeiji       #+#    #+#             */
-/*   Updated: 2025/02/18 15:02:54 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/18 23:43:42 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../cub3d.h"
 
 static void	draw_player_scaled(t_game *game, t_minimap *m, float scale)
 {
 	t_player_draw	p;
 
-	p.px = (int)((game->player.x_pos + 0.5f) * scale);
-	p.py = (int)((game->player.y_pos + 0.5f) * scale);
+	p.player_x = (int)((game->player.x_pos + 0.5f) * scale);
+	p.player_y = (int)((game->player.y_pos + 0.5f) * scale);
 	p.size = 2;
-	p.dy = -p.size;
-	while (p.dy <= p.size)
+	p.offset_y = -p.size;
+	while (p.offset_y <= p.size)
 	{
-		p.dx = -p.size;
-		while (p.dx <= p.size)
+		p.offset_x = -p.size;
+		while (p.offset_x <= p.size)
 		{
-			p.rx = p.px + p.dx;
-			p.ry = p.py + p.dy;
-			if (p.rx >= 0 && p.rx < MINIMAP_WIDTH
-				&& p.ry >= 0 && p.ry < MINIMAP_HEIGHT)
-				put_pixel_to_img(m, p.rx, p.ry, 0xFF0000);
-			p.dx++;
+			p.render_x = p.player_x + p.offset_x;
+			p.render_y = p.player_y + p.offset_y;
+			if (p.render_x >= 0 && p.render_x < MINIMAP_WIDTH
+				&& p.render_y >= 0 && p.render_y < MINIMAP_HEIGHT)
+				put_pixel_to_img(m, p.render_x, p.render_y, 0xFF0000);
+			p.offset_x++;
 		}
-		p.dy++;
+		p.offset_y++;
 	}
 }
 
