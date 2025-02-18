@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_minimap.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
+/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 01:06:13 by ueharakeiji       #+#    #+#             */
-/*   Updated: 2025/02/18 01:49:43 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/18 15:02:54 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

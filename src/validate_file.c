@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate_file.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:43:58 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/17 21:50:05 by kuehara          ###   ########.fr       */
+/*   Updated: 2025/02/17 14:45:24 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ t_file_data	*init_file_data(void)
 	file_data->south_texture = NULL;
 	file_data->west_texture = NULL;
 	file_data->east_texture = NULL;
-	file_data->floor_texture = NULL;
-	file_data->ceiling_texture = NULL;
+	file_data->floor_color_str = NULL;
+	file_data->ceiling_color_str = NULL;
 	file_data->map_lines = NULL;
 	file_data->map_line_count = 0;
 	return (file_data);
@@ -136,11 +136,11 @@ int	process_color_line(t_file_data *file_data, const char *line)
 {
 	if (ft_strncmp(line, "F ", 2) == 0)
 	{
-		file_data->floor_texture = gc_strdup(line + 2);
+		file_data->floor_color_str = gc_strdup(line + 2);
 	}
 	else if (ft_strncmp(line, "C ", 2) == 0)
 	{
-		file_data->ceiling_texture = gc_strdup(line + 2);
+		file_data->ceiling_color_str = gc_strdup(line + 2);
 	}
 	else
 	{
@@ -200,9 +200,9 @@ void	print_missing_config(t_file_data *file_data)
 		ft_putendl_fd("Error: Missing west texture (WE).", 2);
 	if (!file_data->east_texture)
 		ft_putendl_fd("Error: Missing east texture (EA).", 2);
-	if (!file_data->floor_texture)
+	if (!file_data->floor_color_str)
 		ft_putendl_fd("Error: Missing floor color (F).", 2);
-	if (!file_data->ceiling_texture)
+	if (!file_data->ceiling_color_str)
 		ft_putendl_fd("Error: Missing ceiling color (C).", 2);
 }
 
@@ -210,7 +210,7 @@ int	is_config_complete(t_file_data *file_data)
 {
 	return (file_data->north_texture && file_data->south_texture
 		&& file_data->west_texture && file_data->east_texture
-		&& file_data->floor_texture && file_data->ceiling_texture);
+		&& file_data->floor_color_str && file_data->ceiling_color_str);
 }
 
 int	process_config_line(t_file_data *file_data, char *line)
@@ -371,32 +371,8 @@ int	copy_map_to_game(t_game *game, t_file_data *file_data)
 
 int	add_to_game(t_game *game, t_file_data *file_data)
 {
-	game->ceiling = gc_malloc(sizeof(t_image));
-	game->ceiling->img = mlx_xpm_file_to_image(game->window.mlx,
-			file_data->ceiling_texture, &game->ceiling->width,
-			&game->ceiling->height);
-	if (!game->ceiling->img)
-	{
-		ft_putendl_fd("Error: Could not load ceiling texture", 2);
-		return (0);
-	}
-	game->ceiling->addr = mlx_get_data_addr(game->ceiling->img,
-			&game->ceiling->bpp, &game->ceiling->line_length,
-			&game->ceiling->endian);
-
-	game->floor = gc_malloc(sizeof(t_image));
-	game->floor->img = mlx_xpm_file_to_image(game->window.mlx,
-			file_data->floor_texture, &game->floor->width,
-			&game->floor->height);
-	if (!game->floor->img)
-	{
-		ft_putendl_fd("Error: Could not load floor texture", 2);
-		return (0);
-	}
-	game->floor->addr = mlx_get_data_addr(game->floor->img,
-			&game->floor->bpp, &game->floor->line_length,
-			&game->floor->endian);
-
+	game->ceiling = rgb_to_image(game, file_data->ceiling_color_str);
+	game->floor = rgb_to_image(game, file_data->floor_color_str);
 	game->east_texture = gc_malloc(sizeof(t_image));
 	game->east_texture->img = mlx_xpm_file_to_image(game->window.mlx,
 			file_data->east_texture, &game->east_texture->width,

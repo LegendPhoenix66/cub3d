@@ -3,68 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   render_3d.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 10:52:28 by ueharakeiji       #+#    #+#             */
-/*   Updated: 2025/02/17 21:44:45 by kuehara          ###   ########.fr       */
+/*   Updated: 2025/02/17 13:04:05 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 #include <math.h>
-
-/*
-** この関数はウィンドウの上半分に天井テクスチャ、下半分に床テクスチャを
-** タイル状に貼り付けます。
-*/
-static void	fill_ceiling_and_floor(t_game *game, int *data)
-{
-	int			win_w = game->window.width;
-	int			win_h = game->window.height;
-	t_image		*ceil_tex = game->ceiling;
-	t_image		*floor_tex = game->floor;
-	int			x, y;
-	int			texX, texY;
-	int			color;
-
-	// 天井 (上半分)
-	for (y = 0; y < win_h / 2; y++)
-	{
-		for (x = 0; x < win_w; x++)
-		{
-			texX = (x * ceil_tex->width) / win_w;
-			texY = (y * ceil_tex->height) / (win_h / 2);
-			if (texX < 0) texX = 0;
-			if (texX >= ceil_tex->width)
-				texX = ceil_tex->width - 1;
-			if (texY < 0) texY = 0;
-			if (texY >= ceil_tex->height)
-				texY = ceil_tex->height - 1;
-			color = ((int *)ceil_tex->addr)[texY * ceil_tex->width + texX];
-			data[y * win_w + x] = color;
-		}
-	}
-
-	// 床 (下半分)
-	for (y = win_h / 2; y < win_h; y++)
-	{
-		for (x = 0; x < win_w; x++)
-		{
-			texX = (x * floor_tex->width) / win_w;
-			texY = ((y - (win_h / 2)) * floor_tex->height) / (win_h / 2);
-			if (texX < 0) texX = 0;
-			if (texX >= floor_tex->width)
-				texX = floor_tex->width - 1;
-			if (texY < 0) texY = 0;
-			if (texY >= floor_tex->height)
-				texY = floor_tex->height - 1;
-			color = ((int *)floor_tex->addr)[texY * floor_tex->width + texX];
-			data[y * win_w + x] = color;
-		}
-	}
-}
-
-/* 以下、壁のレイキャスト処理は変更なし */
+#include <stdlib.h>
 
 static void	init_ray_vars(t_game *game, int x, float *f, int *i)
 {
@@ -115,6 +63,7 @@ static void	perform_dda(t_game *game, float *f, int *i)
 			i[1] += i[3];
 			i[7] = 1;
 		}
+		/* マップ外チェック */
 		if (i[0] < 0 || i[1] < 0)
 			hit = 1;
 		else if (game->map[i[1]] == NULL)
@@ -205,20 +154,16 @@ void	render_3d(t_game *game)
 	int		x;
 	int		arr[3];
 
-	// ウィンドウ全体サイズのイメージを作成
-	img = mlx_new_image(game->window.mlx, game->window.width, game->window.height);
+	img = mlx_new_image(game->window.mlx,
+			game->window.width, game->window.height);
 	data = (int *)mlx_get_data_addr(img, &arr[0], &arr[1], &arr[2]);
-
-	// まず天井と床をテクスチャで塗りつぶす
-	fill_ceiling_and_floor(game, data);
-
-	// その上から壁をレイキャストで描画
 	x = 0;
 	while (x < game->window.width)
 	{
 		raycast_column(game, x, data);
 		x++;
 	}
-	mlx_put_image_to_window(game->window.mlx, game->window.win, img, 0, 0);
+	mlx_put_image_to_window(game->window.mlx,
+		game->window.win, img, 0, 0);
 	mlx_destroy_image(game->window.mlx, img);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
+/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/18 01:46:37 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/18 15:01:06 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ typedef struct s_file_data
 	char		*south_texture;
 	char		*west_texture;
 	char		*east_texture;
-	char		*floor_texture;
-	char		*ceiling_texture;
+	char		*floor_color_str;
+	char		*ceiling_color_str;
 	char		**map_lines;
 	int			map_line_count;
 }				t_file_data;
@@ -67,7 +67,7 @@ typedef struct s_image
 	int			width;
 	int			height;
 	int			bpp;        
-	int			line_length; 
+	int			line_length;
 	int			endian;    
 }				t_image;
 
