@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:43:58 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/17 14:45:24 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/18 15:47:08 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -371,8 +371,8 @@ int	copy_map_to_game(t_game *game, t_file_data *file_data)
 
 int	add_to_game(t_game *game, t_file_data *file_data)
 {
-	game->ceiling = rgb_to_image(game, file_data->ceiling_color_str);
-	game->floor = rgb_to_image(game, file_data->floor_color_str);
+	game->ceiling_color = rgb_to_hex(file_data->ceiling_color_str);
+	game->floor_color = rgb_to_hex(file_data->floor_color_str);
 	game->east_texture = gc_malloc(sizeof(t_image));
 	game->east_texture->img = mlx_xpm_file_to_image(game->window.mlx,
 			file_data->east_texture, &game->east_texture->width,

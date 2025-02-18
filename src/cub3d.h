@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/18 15:01:06 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/18 15:47:08 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,8 @@ typedef struct s_game
 	t_image		*north_texture;
 	t_image		*south_texture;
 	t_image		*west_texture;
-    t_image     *floor;
-    t_image     *ceiling;
+    int         floor_color;
+    int         ceiling_color;
 }				t_game;
 
 typedef struct s_minimap
