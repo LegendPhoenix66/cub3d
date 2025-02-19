@@ -3,60 +3,53 @@
 /*                                                        :::      ::::::::   */
 /*   validate_map.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
+/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/17 10:52:52 by ueharakeiji       #+#    #+#             */
-/*   Updated: 2025/02/17 13:04:35 by ueharakeiji      ###   ########.fr       */
+/*   Created: 2025/02/13 16:55:03 by lhopp             #+#    #+#             */
+/*   Updated: 2025/02/19 02:10:48 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static int	get_row_length(t_game *game, int row)
+int check_cell(int **map, int row, int col)
 {
-	int	len;
+    if (map[row][col] != 0)
+        return (0);
 
-	len = 0;
-	while (game->map[row][len] != INT_MIN)
-		len++;
-	return (len);
+    if(row == 0 || map[row+1] == NULL)
+        return (1);
+
+    if(col == 0 || map[row][col+1] == INT_MIN)
+        return (1);
+
+    if (map[row + 1][col] == -1 || map[row - 1][col] == -1
+    || map[row][col + 1] == -1 || map[row][col - 1] == -1
+    || map[row + 1][col + 1] == -1 || map[row + 1][col - 1] == -1
+    || map[row - 1][col + 1] == -1 || map[row - 1][col - 1] == -1)
+        return (1);
+
+    return (0);
 }
 
-int	validate_map_closed(t_game *game)
+int is_map_valid(int **map)
 {
-	int	row;
-	int	col;
-	int	len;
-	int	len_up;
-	int	len_down;
+    int row = 0;
+    int col;
 
-	row = 0;
-	while (game->map[row])
-	{
-		len = get_row_length(game, row);
-		col = 0;
-		while (col < len)
-		{
-			if (game->map[row][col] == 0)
-			{
-				if (col - 1 < 0)
-					return (0);
-				if (col + 1 >= len)
-					return (0);
-				if (row - 1 < 0)
-					return (0);
-				len_up = get_row_length(game, row - 1);
-				if (col >= len_up)
-					return (0);
-				if (game->map[row + 1] == NULL)
-					return (0);
-				len_down = get_row_length(game, row + 1);
-				if (col >= len_down)
-					return (0);
-			}
-			col++;
-		}
-		row++;
-	}
-	return (1);
+    while (map[row] != NULL)
+    {
+        col = 0;
+        while (map[row][col] != INT_MIN)
+        {
+            if (check_cell(map, row, col) != 0) {
+                printf("Error: map is not valid\n");
+                printf("Row: %d, Col: %d\n", row, col);
+                return (1);
+            }
+            col++;
+        }
+        row++;
+    }
+    return (0);
 }

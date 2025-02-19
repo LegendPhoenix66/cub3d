@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
+/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 21:05:41 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/18 01:27:27 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/19 02:10:48 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,10 @@ void	print_game(t_game *game)
 	printf("Floor Texture: %d\n", game->floor_color);
 	printf("Ceiling Texture: %d\n", game->ceiling_color);
 	printf("Map Lines:\n");
-	while (i < 5)
+	while (game->map[i])
 	{
 		j = 0;
-		while (j < 10)
+		while (game->map[i][j] != INT_MIN)
 		{
 			printf("%d", game->map[i][j]);
 			j++;
@@ -84,14 +84,8 @@ int	main(int argc, char **argv)
 		ft_putendl_fd("Error: mlx_init failed.", 2);
 		exit(1);
 	}
-	if (is_file_valid(&game, argv[1]) == 0)
+	if (is_file_valid(&game, argv[1]) == 0 && is_map_valid(game.map) == 0)
 	{
-		if (validate_map_closed(&game) == 0)
-		{
-			ft_putendl_fd("Error: Map is not closed.", 2);
-			cleanup(&game);
-			exit(1);
-		}
 		print_game(&game);
 		game.window.win = mlx_new_window(game.window.mlx, game.window.width,
 				game.window.height, "cub3d");

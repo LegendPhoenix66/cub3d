@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:43:58 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/18 15:47:08 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/19 02:06:53 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -313,27 +313,49 @@ void *rgb_to_image(t_game *game, char *color_str) {
     return (image);
 }
 
+void set_player(t_game *game, char direction, int x, int y) {
+    game->player.x_pos = x + 0.5;
+    game->player.y_pos = y + 0.5;
+    if (direction == 'N')
+        game->player.orientation = 0;
+    else if (direction == 'S')
+        game->player.orientation = 180;
+    else if (direction == 'E')
+        game->player.orientation = 90;
+    else if (direction == 'W')
+        game->player.orientation = 270;
+    game->map[y][x] = 0;
+}
+
 int	copy_map_to_game(t_game *game, t_file_data *file_data)
 {
 	int	y;
 	int	x;
+    int max_cols = 0;
 
 	game->map = gc_malloc(sizeof(int *) * (file_data->map_line_count + 1));
 	if (!game->map)
 		return (0);
     game->map[file_data->map_line_count] = NULL;
     for (y = 0; y < file_data->map_line_count; y++)
+    {
+        int row_length = ft_strlen(file_data->map_lines[y]);
+        if (row_length > max_cols)
+            max_cols = row_length;
+    }
+    for (y = 0; y < file_data->map_line_count; y++)
 	{
 		game->map[y] = gc_malloc(sizeof(int)
-				* (ft_strlen(file_data->map_lines[y]) + 1));
+				* (max_cols + 1));
 		if (!game->map[y])
 			return (0);
-        game->map[y][ft_strlen(file_data->map_lines[y])] = INT_MIN;
+        game->map[y][max_cols] = INT_MIN;
     }
 	for (y = 0; y < file_data->map_line_count; y++)
 	{
-		for (x = 0; file_data->map_lines[y][x] != '\0'; x++)
-		{
+        x=0;
+        while (file_data->map_lines[y][x] != '\0')
+        {
 			if (file_data->map_lines[y][x] == '0')
 				game->map[y][x] = 0;
 			else if (file_data->map_lines[y][x] == '1')
@@ -345,17 +367,7 @@ int	copy_map_to_game(t_game *game, t_file_data *file_data)
 				|| file_data->map_lines[y][x] == 'E'
 				|| file_data->map_lines[y][x] == 'W')
 			{
-				game->player.x_pos = x;
-				game->player.y_pos = y;
-				if (file_data->map_lines[y][x] == 'N')
-					game->player.orientation = 0;
-				else if (file_data->map_lines[y][x] == 'S')
-					game->player.orientation = 180;
-				else if (file_data->map_lines[y][x] == 'E')
-					game->player.orientation = 90;
-				else if (file_data->map_lines[y][x] == 'W')
-					game->player.orientation = 270;
-				game->map[y][x] = 0;
+                set_player(game, file_data->map_lines[y][x], x, y);
 			}
 			else
 			{
@@ -364,7 +376,13 @@ int	copy_map_to_game(t_game *game, t_file_data *file_data)
 				ft_putchar_fd('\n', 2);
 				return (0);
 			}
+            x++;
 		}
+        while (x < max_cols)
+        {
+            game->map[y][x] = -1;
+            x++;
+        }
 	}
 	return (1);
 }

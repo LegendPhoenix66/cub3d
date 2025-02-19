@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
+/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/18 23:48:57 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/19 02:10:48 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,7 +204,7 @@ void			check_args(int argc, char **argv);
 int				is_file_valid(t_game *game, char *file);
 
 // validate_map.c
-int				validate_map_closed(t_game *game);
+int is_map_valid(int **map);
 
 // render_3d.c
 void			render_3d(t_game *game);
