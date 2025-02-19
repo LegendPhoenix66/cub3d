@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player_move.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
+/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 11:17:54 by kuehara           #+#    #+#             */
-/*   Updated: 2025/02/17 11:25:01 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/19 21:29:37 by kuehara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ static int	check_collision(t_game *game, float new_x, float new_y)
 	int	tile_x;
 	int	tile_y;
 
-	tile_x = (int)roundf(new_x);
-	tile_y = (int)roundf(new_y);
+	tile_x = (int)new_x;
+	tile_y = (int)new_y;
 	if (tile_x < 0 || tile_y < 0)
 		return (0);
 	if (game->map[tile_y] == NULL)
@@ -30,6 +30,7 @@ static int	check_collision(t_game *game, float new_x, float new_y)
 		return (0);
 	return (1);
 }
+
 
 static void	update_position(float *x, float *y, int keycode, float speed, float angle)
 {
