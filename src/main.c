@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
+/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 21:05:41 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/19 02:10:48 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/19 21:56:12 by kuehara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ int	cleanup(t_game *game)
 		mlx_destroy_image(game->window.mlx, game->west_texture->img);
 	if (game->east_texture && game->east_texture->img)
 		mlx_destroy_image(game->window.mlx, game->east_texture->img);
-
 	if (game->window.win)
 	{
 		mlx_destroy_window(game->window.mlx, game->window.win);

@@ -6,7 +6,7 @@
 /*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 11:17:54 by kuehara           #+#    #+#             */
-/*   Updated: 2025/02/19 21:29:37 by kuehara          ###   ########.fr       */
+/*   Updated: 2025/02/19 21:36:15 by kuehara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,5 @@ void	player_move(t_game *game, int keycode)
 		game->player.x_pos = new_x;
 		game->player.y_pos = new_y;
 	}
-	render_3d(game);
-	draw_minimap(game);
 }
 
