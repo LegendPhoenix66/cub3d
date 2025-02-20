@@ -6,7 +6,7 @@
 /*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 10:58:40 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/20 20:23:40 by kuehara          ###   ########.fr       */
+/*   Updated: 2025/02/20 22:21:55 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,5 @@ int	key_release_handler(int keycode, void *param)
 		game->keys.left = 0;
 	else if (keycode == RIGHT_ARROW_KEY)
 		game->keys.right = 0;
-	return (0);
-}
-
-int	close_window(void *param)
-{
-	t_game	*game;
-
-	game = (t_game *)param;
-	mlx_loop_end(game->window.mlx);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/20 17:42:49 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/20 22:21:55 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,7 +256,6 @@ void				draw_map_scaled(t_game *game, t_minimap *m,
 						t_mapinfo *info);
 
 // hook_handler.c
-int					close_window(void *param);
 int					key_press_handler(int keycode, void *param);
 int					key_release_handler(int keycode, void *param);
 

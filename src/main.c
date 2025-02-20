@@ -6,7 +6,7 @@
 /*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 21:05:41 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/20 20:23:37 by kuehara          ###   ########.fr       */
+/*   Updated: 2025/02/20 22:30:17 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ static int	init_window(t_game *game)
 		ft_putendl_fd("Error: mlx_new_window failed.", 2);
 		return (1);
 	}
-	mlx_hook(game->window.win, DESTROY_NOTIFY, 0, &close_window, game);
+	mlx_hook(game->window.win, DESTROY_NOTIFY, 0, &mlx_loop_end,
+		game->window.mlx);
 	mlx_hook(game->window.win, 2, 1L << 0, &key_press_handler, game);
 	mlx_hook(game->window.win, 3, 1L << 1, &key_release_handler, game);
 	mlx_loop_hook(game->window.mlx, &update_position, game);
@@ -95,11 +96,7 @@ int	main(int argc, char **argv)
 	if (is_file_valid(&game, argv[1]) == 0 && is_map_valid(game.map) == 0)
 	{
 		if (init_window(&game) == 0)
-		{
-			render_3d(&game);
-			draw_minimap(&game);
 			mlx_loop(game.window.mlx);
-		}
 	}
 	cleanup(&game);
 	return (0);

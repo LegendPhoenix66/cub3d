@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:43:58 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/20 18:27:17 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/20 23:24:53 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ int	open_file(char *file, char **content)
 		close(fd);
 		return (1);
 	}
-	while ((bytes_read = read(fd, buffer, chunk_size)) > 0)
+	bytes_read = read(fd, buffer, chunk_size);
+	while (bytes_read > 0)
 	{
 		buffer[bytes_read] = '\0';
 		*content = gc_realloc(*content, total_size + bytes_read + 1);
@@ -72,6 +73,7 @@ int	open_file(char *file, char **content)
 		ft_memcpy(*content + total_size, buffer, bytes_read);
 		total_size += bytes_read;
 		(*content)[total_size] = '\0';
+		bytes_read = read(fd, buffer, chunk_size);
 	}
 	if (bytes_read == -1)
 	{
@@ -91,12 +93,16 @@ int	is_space(char c)
 
 int	is_empty_line(const char *line)
 {
-	for (int i = 0; line[i] != '\0'; i++)
+	int	i;
+
+	i = 0;
+	while (line[i] != '\0')
 	{
 		if (!is_space(line[i]))
 		{
 			return (0);
 		}
+		i++;
 	}
 	return (1);
 }
@@ -157,7 +163,10 @@ int	is_valid_character(char c)
 
 int	is_valid_map_line(const char *line)
 {
-	for (int i = 0; line[i] != '\0'; i++)
+	int	i;
+
+	i = 0;
+	while (line[i] != '\0')
 	{
 		if (!is_valid_character(line[i]))
 		{
@@ -166,6 +175,7 @@ int	is_valid_map_line(const char *line)
 			ft_putchar_fd('\n', 2);
 			return (0);
 		}
+		i++;
 	}
 	return (1);
 }
@@ -322,18 +332,24 @@ void	*rgb_to_image(t_game *game, char *color_str)
 int	count_players(char **map_lines, int map_line_count)
 {
 	int	player_count;
+	int	i;
+	int	j;
 
 	player_count = 0;
-	for (int i = 0; i < map_line_count; i++)
+	i = 0;
+	while (i < map_line_count)
 	{
-		for (int j = 0; map_lines[i][j] != '\0'; j++)
+		j = 0;
+		while (map_lines[i][j] != '\0')
 		{
 			if (map_lines[i][j] == 'N' || map_lines[i][j] == 'S'
 				|| map_lines[i][j] == 'E' || map_lines[i][j] == 'W')
 			{
 				player_count++;
 			}
+			j++;
 		}
+		i++;
 	}
 	return (player_count);
 }
@@ -383,20 +399,25 @@ int	copy_map_to_game(t_game *game, t_file_data *file_data)
 	if (!game->map)
 		return (0);
 	game->map[file_data->map_line_count] = NULL;
-	for (y = 0; y < file_data->map_line_count; y++)
+	y = 0;
+	while (y < file_data->map_line_count)
 	{
 		row_length = ft_strlen(file_data->map_lines[y]);
 		if (row_length > max_cols)
 			max_cols = row_length;
+		y++;
 	}
-	for (y = 0; y < file_data->map_line_count; y++)
+	y = 0;
+	while (y < file_data->map_line_count)
 	{
 		game->map[y] = gc_malloc(sizeof(int) * (max_cols + 1));
 		if (!game->map[y])
 			return (0);
 		game->map[y][max_cols] = INT_MIN;
+		y++;
 	}
-	for (y = 0; y < file_data->map_line_count; y++)
+	y = 0;
+	while (y < file_data->map_line_count)
 	{
 		x = 0;
 		while (file_data->map_lines[y][x] != '\0')
@@ -428,6 +449,7 @@ int	copy_map_to_game(t_game *game, t_file_data *file_data)
 			game->map[y][x] = -1;
 			x++;
 		}
+		y++;
 	}
 	return (1);
 }
@@ -480,16 +502,19 @@ int	validate_content(t_game *game, char *content)
 	if (!file_data)
 		return (1);
 	current_content_ptr = content;
-	while ((line = get_next_line(&current_content_ptr)) != NULL)
+	line = get_next_line(&current_content_ptr);
+	while (line != NULL)
 	{
 		if (is_empty_line(line))
 		{
+			line = get_next_line(&current_content_ptr);
 			continue ;
 		}
 		if (process_config_line(file_data, line) != 0)
 		{
 			return (1);
 		}
+		line = get_next_line(&current_content_ptr);
 	}
 	if (!validate_player_count(file_data->map_lines, file_data->map_line_count))
 		return (1);
