@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player_move.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
+/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 11:17:54 by kuehara           #+#    #+#             */
-/*   Updated: 2025/02/20 11:44:41 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/20 17:50:38 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	compute_offset(t_player *player, int keycode, float *dx, float *dy)
 	float	speed;
 
 	angle = player->orientation * (M_PI / 180.0f);
-	speed = 0.2f;
+	speed = 0.1f;
 	if (keycode == W_KEY)
 	{
 		*dx = sin(angle) * speed;
@@ -70,11 +70,10 @@ static void	move_player(t_game *game, int keycode)
 	compute_offset(&game->player, keycode, &dx, &dy);
 	new_x = game->player.x_pos + dx;
 	new_y = game->player.y_pos + dy;
-	if (check_collision(game, new_x, new_y))
-	{
+	if (check_collision(game, new_x, game->player.y_pos))
 		game->player.x_pos = new_x;
+	if (check_collision(game, game->player.x_pos, new_y))
 		game->player.y_pos = new_y;
-	}
 }
 
 void	player_move(t_game *game, int keycode)
