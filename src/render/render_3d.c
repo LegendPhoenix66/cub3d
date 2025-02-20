@@ -6,7 +6,7 @@
 /*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 19:12:11 by ueharakeiji       #+#    #+#             */
-/*   Updated: 2025/02/19 00:02:00 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/20 11:40:11 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,3 @@ void	render_3d(t_game *game)
 	mlx_put_image_to_window(game->window.mlx, game->window.win, img.img, 0, 0);
 	mlx_destroy_image(game->window.mlx, img.img);
 }
-
-

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player_move.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 11:17:54 by kuehara           #+#    #+#             */
-/*   Updated: 2025/02/19 21:36:15 by kuehara          ###   ########.fr       */
+/*   Updated: 2025/02/20 11:44:41 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,59 +31,67 @@ static int	check_collision(t_game *game, float new_x, float new_y)
 	return (1);
 }
 
-
-static void	update_position(float *x, float *y, int keycode, float speed, float angle)
+static void	compute_offset(t_player *player, int keycode, float *dx, float *dy)
 {
+	float	angle;
+	float	speed;
+
+	angle = player->orientation * (M_PI / 180.0f);
+	speed = 0.2f;
 	if (keycode == W_KEY)
 	{
-		*x = *x + sin(angle) * speed;
-		*y = *y - cos(angle) * speed;
+		*dx = sin(angle) * speed;
+		*dy = -cos(angle) * speed;
 	}
 	else if (keycode == S_KEY)
 	{
-		*x = *x - sin(angle) * speed;
-		*y = *y + cos(angle) * speed;
+		*dx = -sin(angle) * speed;
+		*dy = cos(angle) * speed;
 	}
 	else if (keycode == A_KEY)
 	{
-		*x = *x - cos(angle) * speed;
-		*y = *y - sin(angle) * speed;
+		*dx = -cos(angle) * speed;
+		*dy = -sin(angle) * speed;
 	}
 	else if (keycode == D_KEY)
 	{
-		*x = *x + cos(angle) * speed;
-		*y = *y + sin(angle) * speed;
+		*dx = cos(angle) * speed;
+		*dy = sin(angle) * speed;
 	}
 }
 
-void	player_move(t_game *game, int keycode)
+static void	move_player(t_game *game, int keycode)
 {
-	float	speed;
-	float	angle;
+	float	dx;
+	float	dy;
 	float	new_x;
 	float	new_y;
 
-	speed = 0.2f;
-	new_x = game->player.x_pos;
-	new_y = game->player.y_pos;
-	angle = game->player.orientation * (M_PI / 180.0f);
-	update_position(&new_x, &new_y, keycode, speed, angle);
-	if (keycode == LEFT_ARROW_KEY)
-	{
-		game->player.orientation -= 5;
-		if (game->player.orientation < 0)
-			game->player.orientation += 360;
-	}
-	else if (keycode == RIGHT_ARROW_KEY)
-	{
-		game->player.orientation += 5;
-		if (game->player.orientation >= 360)
-			game->player.orientation -= 360;
-	}
-	else if (check_collision(game, new_x, new_y))
+	compute_offset(&game->player, keycode, &dx, &dy);
+	new_x = game->player.x_pos + dx;
+	new_y = game->player.y_pos + dy;
+	if (check_collision(game, new_x, new_y))
 	{
 		game->player.x_pos = new_x;
 		game->player.y_pos = new_y;
 	}
 }
 
+void	player_move(t_game *game, int keycode)
+{
+	if (keycode == LEFT_ARROW_KEY || keycode == RIGHT_ARROW_KEY)
+	{
+		if (keycode == LEFT_ARROW_KEY)
+			game->player.orientation -= 5;
+		else if (keycode == RIGHT_ARROW_KEY)
+			game->player.orientation += 5;
+		if (game->player.orientation < 0)
+			game->player.orientation += 360;
+		if (game->player.orientation >= 360)
+			game->player.orientation -= 360;
+	}
+	else
+		move_player(game, keycode);
+	render_3d(game);
+	draw_minimap(game);
+}

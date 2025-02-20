@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_minimap.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 01:06:13 by ueharakeiji       #+#    #+#             */
-/*   Updated: 2025/02/19 21:44:27 by kuehara          ###   ########.fr       */
+/*   Updated: 2025/02/20 11:39:20 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ static void	draw_player_scaled(t_game *game, t_minimap *m, float scale)
 {
 	t_player_draw	p;
 
-	p.player_x = (int)((game->player.x_pos + 0.5f) * scale);
-	p.player_y = (int)((game->player.y_pos + 0.5f) * scale);
-	p.size = 2;
+	p.player_x = (int)((game->player.x_pos) * scale);
+	p.player_y = (int)((game->player.y_pos) * scale);
+	p.size = 1;
 	p.offset_y = -p.size;
 	while (p.offset_y <= p.size)
 	{
@@ -45,7 +45,8 @@ void	draw_minimap(t_game *game)
 	if (!game->minimap_image)
 	{
 		game->minimap_image = gc_malloc(sizeof(t_image));
-		game->minimap_image->img = mlx_new_image(game->window.mlx, MINIMAP_WIDTH, MINIMAP_HEIGHT);
+		game->minimap_image->img = mlx_new_image(game->window.mlx,
+				MINIMAP_WIDTH, MINIMAP_HEIGHT);
 	}
 	get_img_info(game->minimap_image->img, &m);
 	draw_map_scaled(game, &m, &map_info);
@@ -53,4 +54,3 @@ void	draw_minimap(t_game *game)
 	mlx_put_image_to_window(game->window.mlx, game->window.win,
 		game->minimap_image->img, MINIMAP_POS_X, MINIMAP_POS_Y);
 }
-

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/19 21:42:26 by kuehara          ###   ########.fr       */
+/*   Updated: 2025/02/20 11:52:25 by ueharakeiji      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ typedef struct s_area
 	int	end_y;
 }	t_area;
 
-
 typedef struct s_mapinfo
 {
 	int		width;
@@ -205,7 +204,7 @@ void			check_args(int argc, char **argv);
 int				is_file_valid(t_game *game, char *file);
 
 // validate_map.c
-int is_map_valid(int **map);
+int				is_map_valid(int **map);
 
 // render_3d.c
 void			render_3d(t_game *game);
