@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:43:58 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/19 02:06:53 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/20 18:27:17 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,10 @@ int	is_empty_line(const char *line)
 	{
 		if (!is_space(line[i]))
 		{
-			return (0); // Not empty
+			return (0);
 		}
 	}
-	return (1); // Empty
+	return (1);
 }
 
 int	process_texture_line(t_file_data *file_data, char *line)
@@ -164,10 +164,10 @@ int	is_valid_map_line(const char *line)
 			ft_putstr_fd("Error: Invalid character in map: ", 2);
 			ft_putchar_fd(line[i], 2);
 			ft_putchar_fd('\n', 2);
-			return (0); // Invalid character found
+			return (0);
 		}
 	}
-	return (1); // Line is valid
+	return (1);
 }
 
 int	process_map_line(t_file_data *file_data, char *line)
@@ -296,66 +296,111 @@ int	rgb_to_hex(char *color_str)
 	return ((r << 16) | (g << 8) | b);
 }
 
-void *rgb_to_image(t_game *game, char *color_str) {
-    int height = game->window.height / 2;
-    int width = game->window.width;
-    int color = rgb_to_hex(color_str);
+void	*rgb_to_image(t_game *game, char *color_str)
+{
+	int		height;
+	int		width;
+	int		color;
+	void	*image;
+	int		*data;
+	int		i;
 
-    void *image = mlx_new_image(game->window.mlx, width, height);
-
-    int *data = (int *)mlx_get_data_addr(image, &(int){0}, &(int){0}, &(int){0});
-    int i = 0;
-    while (i < width * height) {
-        data[i] = color;
-        i++;
-    }
-
-    return (image);
+	height = game->window.height / 2;
+	width = game->window.width;
+	color = rgb_to_hex(color_str);
+	image = mlx_new_image(game->window.mlx, width, height);
+	data = (int *)mlx_get_data_addr(image, &(int){0}, &(int){0}, &(int){0});
+	i = 0;
+	while (i < width * height)
+	{
+		data[i] = color;
+		i++;
+	}
+	return (image);
 }
 
-void set_player(t_game *game, char direction, int x, int y) {
-    game->player.x_pos = x + 0.5;
-    game->player.y_pos = y + 0.5;
-    if (direction == 'N')
-        game->player.orientation = 0;
-    else if (direction == 'S')
-        game->player.orientation = 180;
-    else if (direction == 'E')
-        game->player.orientation = 90;
-    else if (direction == 'W')
-        game->player.orientation = 270;
-    game->map[y][x] = 0;
+int	count_players(char **map_lines, int map_line_count)
+{
+	int	player_count;
+
+	player_count = 0;
+	for (int i = 0; i < map_line_count; i++)
+	{
+		for (int j = 0; map_lines[i][j] != '\0'; j++)
+		{
+			if (map_lines[i][j] == 'N' || map_lines[i][j] == 'S'
+				|| map_lines[i][j] == 'E' || map_lines[i][j] == 'W')
+			{
+				player_count++;
+			}
+		}
+	}
+	return (player_count);
+}
+
+int	validate_player_count(char **map_lines, int map_line_count)
+{
+	int	player_count;
+
+	player_count = count_players(map_lines, map_line_count);
+	if (player_count == 0)
+	{
+		ft_putendl_fd("Error: No player on the map", 2);
+		return (0);
+	}
+	if (player_count > 1)
+	{
+		ft_putendl_fd("Error: Multiple players on the map", 2);
+		return (0);
+	}
+	return (1);
+}
+
+void	set_player(t_game *game, char direction, int x, int y)
+{
+	game->player.x_pos = x + 0.5;
+	game->player.y_pos = y + 0.5;
+	if (direction == 'N')
+		game->player.orientation = 0;
+	else if (direction == 'S')
+		game->player.orientation = 180;
+	else if (direction == 'E')
+		game->player.orientation = 90;
+	else if (direction == 'W')
+		game->player.orientation = 270;
+	game->map[y][x] = 0;
 }
 
 int	copy_map_to_game(t_game *game, t_file_data *file_data)
 {
 	int	y;
 	int	x;
-    int max_cols = 0;
+	int	max_cols;
+	int	row_length;
 
+	max_cols = 0;
 	game->map = gc_malloc(sizeof(int *) * (file_data->map_line_count + 1));
 	if (!game->map)
 		return (0);
-    game->map[file_data->map_line_count] = NULL;
-    for (y = 0; y < file_data->map_line_count; y++)
-    {
-        int row_length = ft_strlen(file_data->map_lines[y]);
-        if (row_length > max_cols)
-            max_cols = row_length;
-    }
-    for (y = 0; y < file_data->map_line_count; y++)
-	{
-		game->map[y] = gc_malloc(sizeof(int)
-				* (max_cols + 1));
-		if (!game->map[y])
-			return (0);
-        game->map[y][max_cols] = INT_MIN;
-    }
+	game->map[file_data->map_line_count] = NULL;
 	for (y = 0; y < file_data->map_line_count; y++)
 	{
-        x=0;
-        while (file_data->map_lines[y][x] != '\0')
-        {
+		row_length = ft_strlen(file_data->map_lines[y]);
+		if (row_length > max_cols)
+			max_cols = row_length;
+	}
+	for (y = 0; y < file_data->map_line_count; y++)
+	{
+		game->map[y] = gc_malloc(sizeof(int) * (max_cols + 1));
+		if (!game->map[y])
+			return (0);
+		game->map[y][max_cols] = INT_MIN;
+	}
+	for (y = 0; y < file_data->map_line_count; y++)
+	{
+		x = 0;
+		while (file_data->map_lines[y][x] != '\0')
+		{
 			if (file_data->map_lines[y][x] == '0')
 				game->map[y][x] = 0;
 			else if (file_data->map_lines[y][x] == '1')
@@ -367,7 +412,7 @@ int	copy_map_to_game(t_game *game, t_file_data *file_data)
 				|| file_data->map_lines[y][x] == 'E'
 				|| file_data->map_lines[y][x] == 'W')
 			{
-                set_player(game, file_data->map_lines[y][x], x, y);
+				set_player(game, file_data->map_lines[y][x], x, y);
 			}
 			else
 			{
@@ -376,13 +421,13 @@ int	copy_map_to_game(t_game *game, t_file_data *file_data)
 				ft_putchar_fd('\n', 2);
 				return (0);
 			}
-            x++;
+			x++;
 		}
-        while (x < max_cols)
-        {
-            game->map[y][x] = -1;
-            x++;
-        }
+		while (x < max_cols)
+		{
+			game->map[y][x] = -1;
+			x++;
+		}
 	}
 	return (1);
 }
@@ -446,6 +491,8 @@ int	validate_content(t_game *game, char *content)
 			return (1);
 		}
 	}
+	if (!validate_player_count(file_data->map_lines, file_data->map_line_count))
+		return (1);
 	add_to_game(game, file_data);
 	return (0);
 }
