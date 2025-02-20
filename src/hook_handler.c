@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hook_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
+/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 10:58:40 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/20 17:41:30 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/20 20:23:40 by kuehara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,7 @@ int	key_press_handler(int keycode, void *param)
 	else if (keycode == RIGHT_ARROW_KEY)
 		game->keys.right = 1;
 	else if (keycode == ESC_KEY)
-	{
-#ifdef __linux__
 		mlx_loop_end(game->window.mlx);
-#else
-		mlx_destroy_window(game->window.mlx, game->window.win);
-		exit(0);
-#endif
-	}
 	return (0);
 }
 
@@ -65,13 +58,7 @@ int	close_window(void *param)
 {
 	t_game	*game;
 
-#ifdef __linux__
 	game = (t_game *)param;
 	mlx_loop_end(game->window.mlx);
-	return (0);
-#else
-	(void)*param;
-#endif
-	exit(0);
 	return (0);
 }

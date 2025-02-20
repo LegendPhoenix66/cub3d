@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   player_move.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
+/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 11:17:54 by kuehara           #+#    #+#             */
-/*   Updated: 2025/02/20 17:50:38 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/20 20:35:07 by kuehara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include <math.h>
 
 static int	check_collision(t_game *game, float new_x, float new_y)
 {
