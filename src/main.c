@@ -3,27 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 21:05:41 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/23 13:45:58 by kuehara          ###   ########.fr       */
+/*   Updated: 2025/02/23 16:39:19 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+static void	destroy_image(void *mlx, t_image *texture)
+{
+	if (texture && texture->img)
+		mlx_destroy_image(mlx, texture->img);
+}
+
 int	cleanup(t_game *game)
 {
-	if (game->north_texture && game->north_texture->img)
-		mlx_destroy_image(game->window.mlx, game->north_texture->img);
-	if (game->south_texture && game->south_texture->img)
-		mlx_destroy_image(game->window.mlx, game->south_texture->img);
-	if (game->west_texture && game->west_texture->img)
-		mlx_destroy_image(game->window.mlx, game->west_texture->img);
-	if (game->east_texture && game->east_texture->img)
-		mlx_destroy_image(game->window.mlx, game->east_texture->img);
-	if (game->render_image && game->render_image->img)
-		mlx_destroy_image(game->window.mlx, game->render_image->img);
+	destroy_image(game->window.mlx, game->north_texture);
+	destroy_image(game->window.mlx, game->south_texture);
+	destroy_image(game->window.mlx, game->west_texture);
+	destroy_image(game->window.mlx, game->east_texture);
+	destroy_image(game->window.mlx, game->render_image);
+	destroy_image(game->window.mlx, game->minimap_bg);
+	destroy_image(game->window.mlx, game->minimap_image);
 	if (game->window.win)
 	{
 		mlx_destroy_window(game->window.mlx, game->window.win);
@@ -77,8 +80,7 @@ static int	init_window(t_game *game)
 	game->minimap_bg = gc_malloc(sizeof(t_image));
 	game->minimap_bg->img = mlx_new_image(game->window.mlx, MINI_W, MINI_H);
 	game->minimap_image = gc_malloc(sizeof(t_image));
-	game->minimap_image->img = mlx_new_image(game->window.mlx,
-			MINI_W, MINI_H);
+	game->minimap_image->img = mlx_new_image(game->window.mlx, MINI_W, MINI_H);
 	{
 		get_map_info(game, &map_info);
 		get_img_info(game->minimap_bg->img, &m_bg);
