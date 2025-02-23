@@ -6,7 +6,7 @@
 /*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 21:05:41 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/20 22:30:17 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/23 13:45:58 by kuehara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ int	cleanup(t_game *game)
 		mlx_destroy_image(game->window.mlx, game->west_texture->img);
 	if (game->east_texture && game->east_texture->img)
 		mlx_destroy_image(game->window.mlx, game->east_texture->img);
-	if (game->minimap_image && game->minimap_image->img)
-		mlx_destroy_image(game->window.mlx, game->minimap_image->img);
+	if (game->render_image && game->render_image->img)
+		mlx_destroy_image(game->window.mlx, game->render_image->img);
 	if (game->window.win)
 	{
 		mlx_destroy_window(game->window.mlx, game->window.win);
@@ -56,22 +56,35 @@ int	update_position(void *param)
 		player_move(game, LEFT_ARROW_KEY);
 	if (game->keys.right)
 		player_move(game, RIGHT_ARROW_KEY);
-	render_3d(game);
-	draw_minimap(game);
+	composite_frame(game);
+	mlx_put_image_to_window(game->window.mlx, game->window.win,
+		game->render_image->img, 0, 0);
 	return (0);
 }
 
 static int	init_window(t_game *game)
 {
+	t_minimap	m_bg;
+	t_mapinfo	map_info;
+
 	game->window.win = mlx_new_window(game->window.mlx, game->window.width,
 			game->window.height, "cub3d");
 	if (!game->window.win)
-	{
-		ft_putendl_fd("Error: mlx_new_window failed.", 2);
 		return (1);
+	game->render_image = gc_malloc(sizeof(t_image));
+	game->render_image->img = mlx_new_image(game->window.mlx,
+			game->window.width, game->window.height);
+	game->minimap_bg = gc_malloc(sizeof(t_image));
+	game->minimap_bg->img = mlx_new_image(game->window.mlx, MINI_W, MINI_H);
+	game->minimap_image = gc_malloc(sizeof(t_image));
+	game->minimap_image->img = mlx_new_image(game->window.mlx,
+			MINI_W, MINI_H);
+	{
+		get_map_info(game, &map_info);
+		get_img_info(game->minimap_bg->img, &m_bg);
+		draw_map_scaled(game, &m_bg, &map_info);
 	}
-	mlx_hook(game->window.win, DESTROY_NOTIFY, 0, &mlx_loop_end,
-		game->window.mlx);
+	mlx_hook(game->window.win, DESTROY_NOTIFY, 0, &cleanup, game);
 	mlx_hook(game->window.win, 2, 1L << 0, &key_press_handler, game);
 	mlx_hook(game->window.win, 3, 1L << 1, &key_release_handler, game);
 	mlx_loop_hook(game->window.mlx, &update_position, game);

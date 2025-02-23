@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_minimap_tiles.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
+/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 01:15:00 by ueharakeiji       #+#    #+#             */
-/*   Updated: 2025/02/18 23:30:19 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/23 13:47:30 by kuehara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	put_pixel_to_img(t_minimap *m, int x, int y, int color)
 	m->img_data[offset + 3] = 0;
 }
 
-void	get_tile_area(t_mapinfo *info, t_draw_map *d, t_area *area)
+static void	get_tile_area(t_mapinfo *info, t_draw_map *d, t_area *area)
 {
 	d->start_x = (int)(d->col * info->scale);
 	d->start_y = (int)(d->row * info->scale);
@@ -35,7 +35,7 @@ void	get_tile_area(t_mapinfo *info, t_draw_map *d, t_area *area)
 	area->end_y = d->end_y;
 }
 
-void	fill_tile_area(t_minimap *m, t_area area)
+static void	fill_tile_area(t_minimap *m, t_area area)
 {
 	int	y;
 	int	x;
@@ -46,7 +46,7 @@ void	fill_tile_area(t_minimap *m, t_area area)
 		x = area.start_x;
 		while (x < area.end_x)
 		{
-			if (x >= 0 && x < MINIMAP_WIDTH && y >= 0 && y < MINIMAP_HEIGHT)
+			if (x >= 0 && x < MINI_W && y >= 0 && y < MINI_H)
 				put_pixel_to_img(m, x, y, m->color);
 			x++;
 		}

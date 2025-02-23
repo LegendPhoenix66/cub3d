@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
+/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/20 22:21:55 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/23 13:52:27 by kuehara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@
 
 # define DESTROY_NOTIFY 17
 
-# define MINIMAP_WIDTH 200
-# define MINIMAP_HEIGHT 200
+# define MINI_W 200
+# define MINI_H 200
 # define MINIMAP_POS_X 10
 # define MINIMAP_POS_Y 10
 
@@ -96,6 +96,13 @@ typedef struct s_window
 	int				width;
 }					t_window;
 
+typedef struct s_mapinfo
+{
+	int				width;
+	int				height;
+	float			scale;
+}					t_mapinfo;
+
 typedef struct s_game
 {
 	t_window		window;
@@ -108,7 +115,10 @@ typedef struct s_game
 	t_image			*west_texture;
 	int				floor_color;
 	int				ceiling_color;
+	t_image			*minimap_bg;
 	t_image			*minimap_image;
+	t_image			*render_image;
+	t_mapinfo		mapinfo;
 }					t_game;
 
 typedef struct s_minimap
@@ -131,13 +141,6 @@ typedef struct s_area
 	int				end_x;
 	int				end_y;
 }					t_area;
-
-typedef struct s_mapinfo
-{
-	int				width;
-	int				height;
-	float			scale;
-}					t_mapinfo;
 
 // structure for tile calculation
 typedef struct s_draw_map
@@ -208,6 +211,17 @@ typedef struct s_raycast
 	int				column_x;
 }					t_raycast;
 
+// frame composition
+typedef struct s_blit
+{
+	char	*render_data;
+	int		render_line;
+	int		bytes_per_row;
+	int		y;
+	int		src_offset;
+	int		dest_offset;
+}	t_blit;
+
 // check_args.c
 void				check_args(int argc, char **argv);
 
@@ -219,6 +233,8 @@ int					is_map_valid(int **map);
 
 // render_3d.c
 void				render_3d(t_game *game);
+void				raycast_column(t_game *game, int x, int *data);
+void				draw_floor_and_ceiling(t_game *game, int *data);
 
 // ray_init.c
 void				init_ray_direction(t_game *game, int x, t_raydata *rd,
@@ -244,6 +260,8 @@ void				player_move(t_game *game, int keycode);
 
 // drawing_minimap.c
 void				draw_minimap(t_game *game);
+void				draw_player_scaled(t_game *game,
+						t_minimap *m, float scale);
 
 // drawing_minimap_utils.c
 void				get_map_info(t_game *game, t_mapinfo *info);
@@ -258,5 +276,11 @@ void				draw_map_scaled(t_game *game, t_minimap *m,
 // hook_handler.c
 int					key_press_handler(int keycode, void *param);
 int					key_release_handler(int keycode, void *param);
+
+// main.c
+int					cleanup(t_game *game);
+
+// composite_frame.c
+void				composite_frame(t_game *game);
 
 #endif // CUB3D_H

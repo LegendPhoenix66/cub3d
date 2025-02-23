@@ -6,7 +6,7 @@
 /*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 11:17:54 by kuehara           #+#    #+#             */
-/*   Updated: 2025/02/20 20:35:07 by kuehara          ###   ########.fr       */
+/*   Updated: 2025/02/23 13:07:14 by kuehara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void	compute_offset(t_player *player, int keycode, float *dx, float *dy)
 	float	speed;
 
 	angle = player->orientation * (M_PI / 180.0f);
-	speed = 0.1f;
+	speed = 0.05f;
 	if (keycode == W_KEY)
 	{
 		*dx = sin(angle) * speed;
@@ -49,13 +49,13 @@ static void	compute_offset(t_player *player, int keycode, float *dx, float *dy)
 	}
 	else if (keycode == A_KEY)
 	{
-		*dx = -cos(angle) * speed;
-		*dy = -sin(angle) * speed;
+		*dx = sin(angle - M_PI_2) * speed;
+		*dy = -cos(angle - M_PI_2) * speed;
 	}
 	else if (keycode == D_KEY)
 	{
-		*dx = cos(angle) * speed;
-		*dy = sin(angle) * speed;
+		*dx = sin(angle + M_PI_2) * speed;
+		*dy = -cos(angle + M_PI_2) * speed;
 	}
 }
 
@@ -80,9 +80,9 @@ void	player_move(t_game *game, int keycode)
 	if (keycode == LEFT_ARROW_KEY || keycode == RIGHT_ARROW_KEY)
 	{
 		if (keycode == LEFT_ARROW_KEY)
-			game->player.orientation -= 5;
+			game->player.orientation -= 2;
 		else if (keycode == RIGHT_ARROW_KEY)
-			game->player.orientation += 5;
+			game->player.orientation += 2;
 		if (game->player.orientation < 0)
 			game->player.orientation += 360;
 		if (game->player.orientation >= 360)
@@ -90,6 +90,4 @@ void	player_move(t_game *game, int keycode)
 	}
 	else
 		move_player(game, keycode);
-	render_3d(game);
-	draw_minimap(game);
 }

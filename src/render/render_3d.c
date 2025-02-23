@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   render_3d.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
+/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 19:12:11 by ueharakeiji       #+#    #+#             */
-/*   Updated: 2025/02/20 11:40:11 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/23 12:55:29 by kuehara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-static void	draw_floor_and_ceiling(t_game *game, int *data)
+void	draw_floor_and_ceiling(t_game *game, int *data)
 {
 	int	x;
 	int	y;
@@ -41,7 +41,7 @@ static void	draw_floor_and_ceiling(t_game *game, int *data)
 	}
 }
 
-static void	raycast_column(t_game *game, int x, int *data)
+void	raycast_column(t_game *game, int x, int *data)
 {
 	t_raydata	rd;
 	t_raycast	rc;
@@ -57,14 +57,13 @@ static void	raycast_column(t_game *game, int x, int *data)
 
 void	render_3d(t_game *game)
 {
-	t_image	img;
-	int		*data;
-	int		x;
+	int	*data;
+	int	x;
 
-	img.img = mlx_new_image(game->window.mlx,
-			game->window.width, game->window.height);
-	data = (int *)mlx_get_data_addr(img.img, &img.bpp,
-			&img.line_length, &img.endian);
+	data = (int *)mlx_get_data_addr(game->render_image->img,
+			&game->render_image->bpp,
+			&game->render_image->line_length,
+			&game->render_image->endian);
 	draw_floor_and_ceiling(game, data);
 	x = 0;
 	while (x < game->window.width)
@@ -72,6 +71,6 @@ void	render_3d(t_game *game)
 		raycast_column(game, x, data);
 		x++;
 	}
-	mlx_put_image_to_window(game->window.mlx, game->window.win, img.img, 0, 0);
-	mlx_destroy_image(game->window.mlx, img.img);
+	mlx_put_image_to_window(game->window.mlx, game->window.win,
+		game->render_image->img, 0, 0);
 }

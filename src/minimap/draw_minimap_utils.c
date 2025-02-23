@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_minimap_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
+/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 01:10:00 by ueharakeiji       #+#    #+#             */
-/*   Updated: 2025/02/18 23:15:59 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/23 13:46:45 by kuehara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ void	get_map_info(t_game *game, t_mapinfo *info)
 		w++;
 	info->width = w;
 	info->height = h;
-	sx = (float)MINIMAP_WIDTH / (float)w;
-	sy = (float)MINIMAP_HEIGHT / (float)h;
+	sx = (float)MINI_W / (float)w;
+	sy = (float)MINI_H / (float)h;
 	if (sx < sy)
 		info->scale = sx;
 	else

@@ -6,7 +6,7 @@
 /*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 10:58:40 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/20 22:21:55 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/23 11:22:45 by kuehara          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,10 @@ int	key_press_handler(int keycode, void *param)
 	else if (keycode == RIGHT_ARROW_KEY)
 		game->keys.right = 1;
 	else if (keycode == ESC_KEY)
-		mlx_loop_end(game->window.mlx);
+	{
+		cleanup(game);
+		exit(0);
+	}
 	return (0);
 }
 
