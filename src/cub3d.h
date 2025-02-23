@@ -3,36 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuehara <kuehara@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:15:31 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/23 13:52:27 by kuehara          ###   ########.fr       */
+/*   Updated: 2025/02/23 18:48:35 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# ifdef __APPLE__
-#  define ESC_KEY 53 // macOS Escape key
-#  define W_KEY 13
-#  define A_KEY 0
-#  define S_KEY 1
-#  define D_KEY 2
-#  define LEFT_ARROW_KEY 123
-#  define RIGHT_ARROW_KEY 124
-#  define IS_LINUX 0
-# elif defined(__linux__)
-#  include <X11/keysym.h>
-#  define ESC_KEY XK_Escape
-#  define W_KEY XK_w
-#  define A_KEY XK_a
-#  define S_KEY XK_s
-#  define D_KEY XK_d
-#  define LEFT_ARROW_KEY XK_Left
-#  define RIGHT_ARROW_KEY XK_Right
-#  define IS_LINUX 1
-# endif
+# include <X11/keysym.h>
+# define ESC_KEY XK_Escape
+# define W_KEY XK_w
+# define A_KEY XK_a
+# define S_KEY XK_s
+# define D_KEY XK_d
+# define LEFT_ARROW_KEY XK_Left
+# define RIGHT_ARROW_KEY XK_Right
 
 # define DESTROY_NOTIFY 17
 
@@ -214,22 +202,19 @@ typedef struct s_raycast
 // frame composition
 typedef struct s_blit
 {
-	char	*render_data;
-	int		render_line;
-	int		bytes_per_row;
-	int		y;
-	int		src_offset;
-	int		dest_offset;
-}	t_blit;
+	char			*render_data;
+	int				render_line;
+	int				bytes_per_row;
+	int				y;
+	int				src_offset;
+	int				dest_offset;
+}					t_blit;
 
 // check_args.c
 void				check_args(int argc, char **argv);
 
 // validate_file.c
 int					is_file_valid(t_game *game, char *file);
-
-// validate_map.c
-int					is_map_valid(int **map);
 
 // render_3d.c
 void				render_3d(t_game *game);
@@ -260,8 +245,7 @@ void				player_move(t_game *game, int keycode);
 
 // drawing_minimap.c
 void				draw_minimap(t_game *game);
-void				draw_player_scaled(t_game *game,
-						t_minimap *m, float scale);
+void				draw_player_scaled(t_game *game, t_minimap *m, float scale);
 
 // drawing_minimap_utils.c
 void				get_map_info(t_game *game, t_mapinfo *info);
@@ -282,5 +266,41 @@ int					cleanup(t_game *game);
 
 // composite_frame.c
 void				composite_frame(t_game *game);
+
+// map_processing.c
+int					process_map_line(t_file_data *file_data, char *line);
+int					copy_map_lines(t_game *game, t_file_data *file_data,
+						int max_columns);
+int					allocate_map(t_game *game, t_file_data *file_data,
+						int max_cols);
+
+// color_processing.c
+int					process_color_line(t_file_data *file_data,
+						const char *line);
+
+// texture_processing.c
+int					process_texture_line(t_file_data *file_data, char *line);
+
+// file_utils.c
+int					is_space(char c);
+int					is_empty_line(const char *line);
+int					handle_error(char *msg);
+
+// file_reader.c
+int					open_file(const char *file, char **content);
+char				*get_next_line(char **content_ptr);
+
+// game_utils.c
+int					add_to_game(t_game *game, t_file_data *file_data);
+
+// map_validation.c
+int					validate_player_count(char **map_lines, int map_line_count);
+int					is_valid_map_line(const char *line);
+
+// validate_map.c
+int					is_map_valid(int **map);
+
+// file_init.c
+t_file_data			*init_file_data(void);
 
 #endif // CUB3D_H

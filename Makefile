@@ -6,8 +6,10 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
 # Files
-SRC = 	main.c hook_handler.c check_args.c validate_file.c \
-		validate_map.c player_move.c composite_frame.c \
+SRC = 	main.c hook_handler.c check_args.c player_move.c composite_frame.c \
+		validate/validate_map.c validate/color_processing.c validate/content_validation.c \
+		validate/file_init.c validate/file_reader.c validate/file_utils.c validate/texture_processing.c \
+		validate/game_utils.c validate/map_processing.c validate/map_validation.c \
 		render/ray_init.c render/stripe_calc.c render/stripe_draw.c render/render_3d.c \
 		minimap/draw_minimap.c minimap/draw_minimap_utils.c minimap/draw_minimap_tiles.c \
 		garbage_collection/gc.c garbage_collection/gc_utils.c

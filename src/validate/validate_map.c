@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   validate_map.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ueharakeiji <ueharakeiji@student.42.fr>    +#+  +:+       +#+        */
+/*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 16:55:03 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/20 11:47:27 by ueharakeiji      ###   ########.fr       */
+/*   Updated: 2025/02/23 18:28:27 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../cub3d.h"
 
 int	check_cell(int **map, int row, int col)
 {
@@ -20,10 +20,10 @@ int	check_cell(int **map, int row, int col)
 		return (1);
 	if (col == 0 || map[row][col + 1] == INT_MIN)
 		return (1);
-	if (map[row + 1][col] == -1 || map[row - 1][col] == -1
-	|| map[row][col + 1] == -1 || map[row][col - 1] == -1
-	|| map[row + 1][col + 1] == -1 || map[row + 1][col - 1] == -1
-	|| map[row - 1][col + 1] == -1 || map[row - 1][col - 1] == -1)
+	if (map[row + 1][col] == -1 || map[row - 1][col] == -1 || map[row][col
+		+ 1] == -1 || map[row][col - 1] == -1 || map[row + 1][col + 1] == -1
+		|| map[row + 1][col - 1] == -1 || map[row - 1][col + 1] == -1 || map[row
+		- 1][col - 1] == -1)
 		return (1);
 	return (0);
 }
