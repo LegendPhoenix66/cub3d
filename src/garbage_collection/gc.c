@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 16:20:50 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/10 16:50:18 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/23 17:13:08 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,34 +21,31 @@ void	*gc_malloc(size_t size)
 	{
 		return (NULL);
 	}
-	create_memory_block(ptr);
+	create_memory_block(ptr, size);
 	return (ptr);
 }
 
 void	*gc_realloc(void *ptr, size_t new_size)
 {
-	t_memory_block	*current;
+	t_memory_block	*block;
 	void			*new_ptr;
-	t_memory_block	**memory_list_ptr;
+	size_t			bytes_to_copy;
 
 	if (ptr == NULL)
 		return (gc_malloc(new_size));
-	memory_list_ptr = get_memory_list_ptr();
-	current = *memory_list_ptr;
-	while (current != NULL)
-	{
-		if (current->ptr == ptr)
-		{
-			new_ptr = gc_malloc(new_size);
-			if (new_ptr == NULL)
-				return (NULL);
-			ft_memcpy(new_ptr, ptr, new_size);
-			gc_free(ptr);
-			return (new_ptr);
-		}
-		current = current->next;
-	}
-	return (NULL);
+	block = find_memory_block(ptr);
+	if (block == NULL)
+		return (NULL);
+	new_ptr = gc_malloc(new_size);
+	if (new_ptr == NULL)
+		return (NULL);
+	if (block->size < new_size)
+		bytes_to_copy = block->size;
+	else
+		bytes_to_copy = new_size;
+	ft_memcpy(new_ptr, ptr, bytes_to_copy);
+	gc_free(ptr);
+	return (new_ptr);
 }
 
 char	*gc_strdup(const char *s)
