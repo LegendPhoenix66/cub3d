@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42luxembourg.lu>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:43:58 by lhopp             #+#    #+#             */
-/*   Updated: 2025/02/20 23:24:53 by lhopp            ###   ########.fr       */
+/*   Updated: 2025/02/23 16:58:26 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,63 @@ t_file_data	*init_file_data(void)
 	return (file_data);
 }
 
-int	open_file(char *file, char **content)
+int	append_buffer(char **content, const char *buffer, size_t bytes_read,
+		size_t *total_size)
 {
-	int		fd;
-	char	*buffer;
-	size_t	chunk_size;
-	ssize_t	bytes_read;
-	size_t	total_size;
+	char	*new_content;
 
-	chunk_size = 1024;
+	new_content = gc_realloc(*content, *total_size + bytes_read + 1);
+	if (!new_content)
+		return (1);
+	*content = new_content;
+	ft_memcpy(*content + *total_size, buffer, bytes_read);
+	*total_size += bytes_read;
+	(*content)[*total_size] = '\0';
+	return (0);
+}
+
+static int	handle_error(char *msg)
+{
+	ft_putendl_fd(msg, 2);
+	return (1);
+}
+
+static ssize_t	read_and_process(int fd, char *buffer, char **content,
+		size_t *total_size)
+{
+	ssize_t	bytes_read;
+
+	bytes_read = read(fd, buffer, 1024);
+	while (bytes_read > 0)
+	{
+		buffer[bytes_read] = '\0';
+		if (append_buffer(content, buffer, bytes_read, total_size) == 1)
+			return (handle_error("Error: Memory allocation failed"));
+		bytes_read = read(fd, buffer, 1024);
+	}
+	return (bytes_read);
+}
+
+int	read_file_content(int fd, char **content)
+{
+	char	*buffer;
+	size_t	total_size;
+	ssize_t	read_status;
+
 	total_size = 0;
+	buffer = gc_malloc(1025);
+	if (!buffer)
+		return (handle_error("Error: Memory allocation failed"));
+	read_status = read_and_process(fd, buffer, content, &total_size);
+	if (read_status == -1)
+		return (handle_error("Error: Failed to read the file"));
+	return (0);
+}
+
+int	open_file(const char *file, char **content)
+{
+	int	fd;
+
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 	{
@@ -52,32 +99,8 @@ int	open_file(char *file, char **content)
 		return (1);
 	}
 	(*content)[0] = '\0';
-	buffer = gc_malloc(chunk_size + 1);
-	if (!buffer)
+	if (read_file_content(fd, content) == 1)
 	{
-		ft_putendl_fd("Error: Memory allocation failed", 2);
-		close(fd);
-		return (1);
-	}
-	bytes_read = read(fd, buffer, chunk_size);
-	while (bytes_read > 0)
-	{
-		buffer[bytes_read] = '\0';
-		*content = gc_realloc(*content, total_size + bytes_read + 1);
-		if (!*content)
-		{
-			ft_putendl_fd("Error: Memory allocation failed", 2);
-			close(fd);
-			return (1);
-		}
-		ft_memcpy(*content + total_size, buffer, bytes_read);
-		total_size += bytes_read;
-		(*content)[total_size] = '\0';
-		bytes_read = read(fd, buffer, chunk_size);
-	}
-	if (bytes_read == -1)
-	{
-		ft_putendl_fd("Error: Failed to read the file", 2);
 		close(fd);
 		return (1);
 	}
@@ -113,13 +136,9 @@ int	process_texture_line(t_file_data *file_data, char *line)
 
 	if (ft_strncmp(line, "NO ", 3) == 0 || ft_strncmp(line, "SO ", 3) == 0
 		|| ft_strncmp(line, "WE ", 3) == 0 || ft_strncmp(line, "EA ", 3) == 0)
-	{
 		texture_path = gc_strdup(line + 3);
-	}
 	else
-	{
 		return (0);
-	}
 	if (access(texture_path, F_OK) != 0)
 	{
 		ft_putstr_fd("Error: Texture file not found: ", 2);
@@ -259,7 +278,6 @@ char	*get_next_line(char **content_ptr)
 		return (NULL);
 	line_start = *content_ptr;
 	line_end = ft_strchr(line_start, '\n');
-	line = NULL;
 	if (line_end)
 	{
 		line = gc_malloc(line_end - line_start + 1);
@@ -304,29 +322,6 @@ int	rgb_to_hex(char *color_str)
 		return (-1);
 	}
 	return ((r << 16) | (g << 8) | b);
-}
-
-void	*rgb_to_image(t_game *game, char *color_str)
-{
-	int		height;
-	int		width;
-	int		color;
-	void	*image;
-	int		*data;
-	int		i;
-
-	height = game->window.height / 2;
-	width = game->window.width;
-	color = rgb_to_hex(color_str);
-	image = mlx_new_image(game->window.mlx, width, height);
-	data = (int *)mlx_get_data_addr(image, &(int){0}, &(int){0}, &(int){0});
-	i = 0;
-	while (i < width * height)
-	{
-		data[i] = color;
-		i++;
-	}
-	return (image);
 }
 
 int	count_players(char **map_lines, int map_line_count)
@@ -387,26 +382,32 @@ void	set_player(t_game *game, char direction, int x, int y)
 	game->map[y][x] = 0;
 }
 
-int	copy_map_to_game(t_game *game, t_file_data *file_data)
+static int	get_max_columns(t_file_data *file_data)
 {
-	int	y;
-	int	x;
 	int	max_cols;
-	int	row_length;
+	int	current_row_length;
+	int	y;
 
 	max_cols = 0;
+	y = 0;
+	while (y < file_data->map_line_count)
+	{
+		current_row_length = ft_strlen(file_data->map_lines[y]);
+		if (current_row_length > max_cols)
+			max_cols = current_row_length;
+		y++;
+	}
+	return (max_cols);
+}
+
+static int	allocate_map(t_game *game, t_file_data *file_data, int max_cols)
+{
+	int	y;
+
 	game->map = gc_malloc(sizeof(int *) * (file_data->map_line_count + 1));
 	if (!game->map)
 		return (0);
 	game->map[file_data->map_line_count] = NULL;
-	y = 0;
-	while (y < file_data->map_line_count)
-	{
-		row_length = ft_strlen(file_data->map_lines[y]);
-		if (row_length > max_cols)
-			max_cols = row_length;
-		y++;
-	}
 	y = 0;
 	while (y < file_data->map_line_count)
 	{
@@ -416,76 +417,94 @@ int	copy_map_to_game(t_game *game, t_file_data *file_data)
 		game->map[y][max_cols] = INT_MIN;
 		y++;
 	}
-	y = 0;
-	while (y < file_data->map_line_count)
+	return (1);
+}
+
+static int	map_char_to_value(t_game *game, char character, int row, int col)
+{
+	if (character == '0')
+		return (0);
+	else if (character == '1')
+		return (1);
+	else if (character == ' ')
+		return (-1);
+	else if (character == 'N' || character == 'S' || character == 'E'
+		|| character == 'W')
 	{
-		x = 0;
-		while (file_data->map_lines[y][x] != '\0')
+		set_player(game, character, col, row);
+		return (0);
+	}
+	ft_putstr_fd("Error: Invalid character in map: ", 2);
+	ft_putchar_fd(character, 2);
+	ft_putchar_fd('\n', 2);
+	return (-2);
+}
+
+static int	copy_map_lines(t_game *game, t_file_data *file_data,
+		int max_columns)
+{
+	int	row;
+	int	col;
+	int	value;
+
+	row = 0;
+	while (row < file_data->map_line_count)
+	{
+		col = 0;
+		while (file_data->map_lines[row][col] != '\0')
 		{
-			if (file_data->map_lines[y][x] == '0')
-				game->map[y][x] = 0;
-			else if (file_data->map_lines[y][x] == '1')
-				game->map[y][x] = 1;
-			else if (file_data->map_lines[y][x] == ' ')
-				game->map[y][x] = -1;
-			else if (file_data->map_lines[y][x] == 'N'
-				|| file_data->map_lines[y][x] == 'S'
-				|| file_data->map_lines[y][x] == 'E'
-				|| file_data->map_lines[y][x] == 'W')
-			{
-				set_player(game, file_data->map_lines[y][x], x, y);
-			}
-			else
-			{
-				ft_putstr_fd("Error: Invalid character in map: ", 2);
-				ft_putchar_fd(file_data->map_lines[y][x], 2);
-				ft_putchar_fd('\n', 2);
+			value = map_char_to_value(game, file_data->map_lines[row][col], row,
+					col);
+			if (value == -2)
 				return (0);
-			}
-			x++;
+			game->map[row][col] = value;
+			col++;
 		}
-		while (x < max_cols)
-		{
-			game->map[y][x] = -1;
-			x++;
-		}
-		y++;
+		while (col < max_columns)
+			game->map[row][col++] = -1;
+		row++;
 	}
 	return (1);
+}
+
+int	copy_map_to_game(t_game *game, t_file_data *file_data)
+{
+	int	max_cols;
+
+	max_cols = get_max_columns(file_data);
+	if (!allocate_map(game, file_data, max_cols))
+		return (0);
+	if (!copy_map_lines(game, file_data, max_cols))
+		return (0);
+	return (1);
+}
+
+static t_image	*initialize_texture(void *mlx, char *file_path)
+{
+	t_image	*texture;
+
+	texture = gc_malloc(sizeof(t_image));
+	texture->img = mlx_xpm_file_to_image(mlx, file_path, &texture->width,
+			&texture->height);
+	if (!texture->img)
+		return (NULL);
+	texture->addr = mlx_get_data_addr(texture->img, &texture->bpp,
+			&texture->line_length, &texture->endian);
+	return (texture);
 }
 
 int	add_to_game(t_game *game, t_file_data *file_data)
 {
 	game->ceiling_color = rgb_to_hex(file_data->ceiling_color_str);
 	game->floor_color = rgb_to_hex(file_data->floor_color_str);
-	game->east_texture = gc_malloc(sizeof(t_image));
-	game->east_texture->img = mlx_xpm_file_to_image(game->window.mlx,
-			file_data->east_texture, &game->east_texture->width,
-			&game->east_texture->height);
-	game->east_texture->addr = mlx_get_data_addr(game->east_texture->img,
-			&game->east_texture->bpp, &game->east_texture->line_length,
-			&game->east_texture->endian);
-	game->north_texture = gc_malloc(sizeof(t_image));
-	game->north_texture->img = mlx_xpm_file_to_image(game->window.mlx,
-			file_data->north_texture, &game->north_texture->width,
-			&game->north_texture->height);
-	game->north_texture->addr = mlx_get_data_addr(game->north_texture->img,
-			&game->north_texture->bpp, &game->north_texture->line_length,
-			&game->north_texture->endian);
-	game->south_texture = gc_malloc(sizeof(t_image));
-	game->south_texture->img = mlx_xpm_file_to_image(game->window.mlx,
-			file_data->south_texture, &game->south_texture->width,
-			&game->south_texture->height);
-	game->south_texture->addr = mlx_get_data_addr(game->south_texture->img,
-			&game->south_texture->bpp, &game->south_texture->line_length,
-			&game->south_texture->endian);
-	game->west_texture = gc_malloc(sizeof(t_image));
-	game->west_texture->img = mlx_xpm_file_to_image(game->window.mlx,
-			file_data->west_texture, &game->west_texture->width,
-			&game->west_texture->height);
-	game->west_texture->addr = mlx_get_data_addr(game->west_texture->img,
-			&game->west_texture->bpp, &game->west_texture->line_length,
-			&game->west_texture->endian);
+	game->east_texture = initialize_texture(game->window.mlx,
+			file_data->east_texture);
+	game->north_texture = initialize_texture(game->window.mlx,
+			file_data->north_texture);
+	game->south_texture = initialize_texture(game->window.mlx,
+			file_data->south_texture);
+	game->west_texture = initialize_texture(game->window.mlx,
+			file_data->west_texture);
 	return (copy_map_to_game(game, file_data));
 }
 
@@ -495,11 +514,8 @@ int	validate_content(t_game *game, char *content)
 	char		*current_content_ptr;
 	char		*line;
 
-	(void)game;
-	if (!content)
-		return (1);
 	file_data = init_file_data();
-	if (!file_data)
+	if (!content || !file_data)
 		return (1);
 	current_content_ptr = content;
 	line = get_next_line(&current_content_ptr);
@@ -511,9 +527,7 @@ int	validate_content(t_game *game, char *content)
 			continue ;
 		}
 		if (process_config_line(file_data, line) != 0)
-		{
 			return (1);
-		}
 		line = get_next_line(&current_content_ptr);
 	}
 	if (!validate_player_count(file_data->map_lines, file_data->map_line_count))
