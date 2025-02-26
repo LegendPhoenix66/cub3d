@@ -30,10 +30,7 @@ int	key_press_handler(int keycode, void *param)
 	else if (keycode == RIGHT_ARROW_KEY)
 		game->keys.right = 1;
 	else if (keycode == ESC_KEY)
-	{
-		cleanup(game);
-		exit(0);
-	}
+		mlx_loop_end(game->window.mlx);
 	return (0);
 }
 

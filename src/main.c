@@ -86,7 +86,8 @@ static int	init_window(t_game *game)
 		get_img_info(game->minimap_bg->img, &m_bg);
 		draw_map_scaled(game, &m_bg, &map_info);
 	}
-	mlx_hook(game->window.win, DESTROY_NOTIFY, 0, &cleanup, game);
+	mlx_hook(game->window.win, DESTROY_NOTIFY, 0, &mlx_loop_end,
+		game->window.mlx);
 	mlx_hook(game->window.win, 2, 1L << 0, &key_press_handler, game);
 	mlx_hook(game->window.win, 3, 1L << 1, &key_release_handler, game);
 	mlx_loop_hook(game->window.mlx, &update_position, game);
